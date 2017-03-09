@@ -1,40 +1,31 @@
 <?php
 
-//\Phpfox_Module::instance()
-//    ->addServiceNames([
-//        'cashpayment.proccess' => '\Apps\CM_CashPayment\Service\Process',
-//        'elmoney' => '\Apps\CM_CashPayment\Service\CashPayment',
-//        'cashpayment.browse' => '\Apps\CM_CashPayment\Service\Browse',
-//        'cashpayment.callback' => '\Apps\CM_CashPayment\Service\Callback',
-//    ])
-//    ->addComponentNames('controller', [
-//        'cashpayment.admincp.settings' => 'Apps\CM_CashPayment\Controller\Admin\Settings',
-//        'cashpayment.admincp.payments' => 'Apps\CM_CashPayment\Controller\Admin\Payments',
-//        'cashpayment.buy' => 'Apps\CM_CashPayment\Controller\Buy',
-//        'cashpayment.endorse' => 'Apps\CM_CashPayment\Controller\Endorse',
-//        'cashpayment.profile' => 'Apps\CM_CashPayment\Controller\Profile',
-//    ])
-//    ->addAliasNames('cashpayment', 'CM_CashPayment')
-//    ->addTemplateDirs([
-//        'cashpayment' => PHPFOX_DIR_SITE_APPS . 'CM_CashPayment' . PHPFOX_DS . 'views',
-//    ]);
+\Phpfox_Module::instance()
+    ->addServiceNames([
+    ])
+    ->addComponentNames('controller', [
+        'elmoney.admincp.settings' => 'Apps\CM_ElMoney\Controller\Admin\Settings',
+    ])
+    ->addAliasNames('elmoney', 'CM_ElMoney')
+    ->addTemplateDirs([
+        'elmoney' => PHPFOX_DIR_SITE_APPS . 'CM_ElMoney' . PHPFOX_DS . 'views',
+    ]);
+
+group('/admincp/elmoney/', function(){
+    route('settings', 'elmoney.admincp.settings');
+});
+
 //
-//group('/admincp/cashpayment/', function(){
-//    route('settings', 'cashpayment.admincp.settings');
-//    route('payments', 'cashpayment.admincp.payments');
-//});
+//defined('CM_CASH_PAYMENT_ACTIVE') or define('CM_CASH_PAYMENT_ACTIVE', Phpfox::getService('elmoney')->isActive());
 //
-//defined('CM_CASH_PAYMENT_ACTIVE') or define('CM_CASH_PAYMENT_ACTIVE', Phpfox::getService('cashpayment')->isActive());
-//
-//group('/cashpayment/', function(){
-//    route('setting/save', 'cashpayment.admincp.settings');
-//    route('endorse', 'cashpayment.endorse');
-//
+group('/elmoney/', function(){
+    route('setting/save', 'elmoney.admincp.settings');
+
 //    if (CM_CASH_PAYMENT_ACTIVE) {
-//        route('buy', 'cashpayment.buy');
-//        route('info', 'cashpayment.buy');
-//        route('endorse/profile', 'cashpayment.endorse');
-//        route('profile', 'cashpayment.profile');
+//        route('buy', 'elmoney.buy');
+//        route('info', 'elmoney.buy');
+//        route('endorse/profile', 'elmoney.endorse');
+//        route('profile', 'elmoney.profile');
 //    }
-//
-//});
+
+});
