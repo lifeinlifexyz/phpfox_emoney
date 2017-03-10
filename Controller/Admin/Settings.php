@@ -4,34 +4,63 @@ namespace Apps\CM_ElMoney\Controller\Admin;
 
 
 use Phpfox;
-use Phpfox_Error;
 use Phpfox_Plugin;
 
 class Settings extends \Phpfox_Component
 {
     public function process()
     {
-        if (!($aGateway = Phpfox::getService('api.gateway')->getForEdit('elmoney')))
-        {
-            return Phpfox_Error::display(Phpfox::getPhrase('api.unable_to_find_the_payment_gateway'));
+        Phpfox::isAdmin(true);
+
+        $aValidate = [
+            'currency_code' =>  _p('Currency code is required'),
+        ];
+        /**
+         * @var $oSetting \Apps\CM_ElMoney\Service\Settings
+         */
+        $oSetting = Phpfox::getService('elmoney.settings');
+        $aForms = [
+            'currency_code' => $oSetting['currency_code'],
+        ];
+
+        $aCurrencies = Phpfox::getService('core.currency')->get();
+
+        foreach($aCurrencies as $sCurrencyId => $aCurrency) {
+            $aCurrency['var'] = 'exchange_rate_' . $sCurrencyId;
+
+            $aValidate[$aCurrency['var']] = [
+                'title' => _p('Exchange rate must be a valid money format(ex: 1.00)', ['currency' => $sCurrencyId]),
+                'pattern' => '/^\d{1,}([\.]\d{1,})$/',
+            ];
+
+            $aForms[$aCurrency['var']] = $oSetting[$aCurrency['var']] ?: '1.00';
+            $aCurrencies[$sCurrencyId] = $aCurrency;
         }
+
+        $oValidator = \Phpfox_Validator::instance();
+        $oValidator->set([
+            'sFormName' => 'js_elmoney_setting',
+            'aParams' => $aValidate,
+        ]);
 
         if (($aVals = $this->request()->getArray('val')))
         {
-            if (Phpfox::getService('api.gateway.process')->update($aGateway['gateway_id'], $aVals))
-            {
-                cache()->del('elmoney_gateway_setting');
+            $aForms = $aVals;
+            if ($oValidator->isValid($aVals)) {
+                Phpfox::getService('elmoney.settings')->save($aVals);
                 $this->url()->send('admincp.app',
                     [
                         'id' => 'CM_ElMoney',
-                    ], Phpfox::getPhrase('api.gateway_successfully_updated'));
+                    ], _p('Settings saved'));
             }
         }
 
-        $this->template()->setTitle(Phpfox::getPhrase('api.payment_gateways'))
-            ->assign(array(
-                    'aForms' => $aGateway
-                )
+        $this->template()
+            ->setTitle(_p('Settings'))
+            ->assign([
+                    'aCurrencies' => $aCurrencies,
+                    'aForms' => $aForms,
+                ]
             );
         return null;
     }

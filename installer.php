@@ -3,21 +3,10 @@
 $oInstaller = new \Core\App\Installer();
 $oInstaller->onInstall(function() use ($oInstaller){
 
-//    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('cashpayment_payments') . '` (
-//      `payment_id` bigint(30) NOT NULL AUTO_INCREMENT,
-//      `seller_id` int(11) NOT NULL,
-//      `user_id` int(11) NOT NULL,
-//      `item_name` varchar(300) NOT NULL,
-//      `item_number` varchar(300) NOT NULL,
-//      `currency_code` varchar(5) NOT NULL,
-//      `return_url` varchar(200) NOT NULL,
-//      `amount` int(15) NOT NULL,
-//      `time_stamp` INT( 12 ) NULL DEFAULT NULL ,
-//      `status` VARCHAR( 5 ) NOT DEFAULT \'pending\'
-//      PRIMARY KEY (`payment_id`),
-//      KEY `seller_id` (`seller_id`,`buyer_id`)
-//      KEY  `status` (`status`)
-//    ) AUTO_INCREMENT=10000 ;');
+    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_settings') . '` (
+      `name` varchar(30) NOT NULL DEFAULT \'\',
+      `value` text(100) NOT NULL DEFAULT \'\'
+    );');
 
     if (!$oInstaller->db->select('count(*)')->from(Phpfox::getT('api_gateway'))->where('gateway_id = \'elmoney\'')->count()) {
         $oInstaller->db->insert(Phpfox::getT('api_gateway'), [

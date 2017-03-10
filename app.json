@@ -6,6 +6,7 @@
   "icon": "",
   "vendor": "<a href=\"//codemake.org\" target=\"_blank\">CodeMake.Org</a> - See all our products <a href=\"//store.phpfox.com/techie/u/ecodemaster\" target=_new>HERE</a> - contact us at: support@codemake.org",
   "admincp_menu": {
-    "Gateway Settings": "elmoney.settings"
+    "Settings": "elmoney.settings",
+    "Gateway Settings": "elmoney.gateway.settings"
   }
 }
