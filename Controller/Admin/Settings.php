@@ -19,8 +19,10 @@ class Settings extends \Phpfox_Component
          * @var $oSetting \Apps\CM_ElMoney\Service\Settings
          */
         $oSetting = Phpfox::getService('elmoney.settings');
+        $sCommission = $oSetting['commissions'];
         $aForms = [
             'currency_code' => $oSetting['currency_code'],
+            'commissions' => empty($sCommission) ? [''] : json_decode($oSetting['commissions'], true),
         ];
 
         $aCurrencies = Phpfox::getService('core.currency')->get();
@@ -45,8 +47,15 @@ class Settings extends \Phpfox_Component
 
         if (($aVals = $this->request()->getArray('val')))
         {
+            $aNewCommissions = $aVals['commissions'];
+            foreach($aNewCommissions as $sCommission) {
+                if (!preg_match('/^\d{1,}:\d{1,}\|\d{1,}$/', $sCommission)) {
+                    \Phpfox_Error::set(_p('Commission format must be digit:digit|digit'));
+                }
+            }
             $aForms = $aVals;
             if ($oValidator->isValid($aVals)) {
+                $aVals['commissions'] = json_encode($aVals['commissions']);
                 Phpfox::getService('elmoney.settings')->save($aVals);
                 $this->url()->send('admincp.app',
                     [
@@ -56,6 +65,9 @@ class Settings extends \Phpfox_Component
         }
 
         $this->template()
+            ->setPhrase([
+                _p('Remove'),
+            ])
             ->setTitle(_p('Settings'))
             ->assign([
                     'aCurrencies' => $aCurrencies,

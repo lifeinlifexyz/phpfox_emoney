@@ -8,5 +8,13 @@
   "admincp_menu": {
     "Settings": "elmoney.settings",
     "Gateway Settings": "elmoney.gateway.settings"
+  },
+  "component" : {
+    "block" : {
+      "balance" : ""
+    },
+    "controller" : {
+      "profile" : "elmoney.profile"
+    }
   }
 }

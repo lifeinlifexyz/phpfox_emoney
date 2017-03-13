@@ -9,16 +9,18 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
     protected $_sTable = 'elmoney_settings';
     protected $sTable;
     static $aSettings = [];
+    private $sCacheId = '';
 
     public function __construct()
     {
         $this->sTable = Phpfox::getT($this->_sTable);
+        $this->sCacheId = $this->cache()->set('elmoney_settings');
         self::$aSettings = $this->all();
     }
 
     public function save($aVals)
     {
-        $this->cache()->remove('elmoney_settings');
+        $this->cache()->remove($this->sCacheId);
         return $this->_save($aVals);
     }
 
@@ -50,19 +52,19 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
     public function del($sName)
     {
         $this->database()->delete($this->sTable, '`name` = \'' . $sName . '\'');
-        $this->cache()->remove('elmoney_settings');
+        $this->cache()->remove($this->sCacheId);
         self::$aSettings = $this->all();
     }
 
     public function all()
     {
-        if (empty($aSettings = $this->cache()->get('elmoney_settings'))) {
+        if (empty($aSettings = $this->cache()->get($this->sCacheId))) {
             $aRawSettings = $this->database()->select('*')->from($this->sTable)->all();
             $aSettings = [];
             foreach($aRawSettings as $aRawSetting) {
                 $aSettings[$aRawSetting['name']] = $aRawSetting['value'];
             }
-            $this->cache()->set('elmoney_settings', $aSettings);
+            $this->cache()->save($this->sCacheId, $aSettings);
         }
         return $aSettings;
     }
