@@ -30,6 +30,7 @@ defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getS
 if(CM_EL_MONEY_IS_ACTIVE) {
     Phpfox_Module::instance()->addComponentNames('controller', [
         'elmoney.profile' => 'Apps\CM_ElMoney\Controller\Profile',
+        'elmoney.pay' => 'Apps\CM_ElMoney\Controller\Pay',
         'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
     ])
     ->addComponentNames('block', [
@@ -44,6 +45,7 @@ group('/elmoney/', function(){
     if (CM_EL_MONEY_IS_ACTIVE) {
         route('profile', 'elmoney.profile');
         route('funds/add', 'elmoney.funds.add');
+        route('pay', 'elmoney.pay');
     }
 
 });

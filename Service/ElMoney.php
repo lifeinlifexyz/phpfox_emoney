@@ -95,6 +95,17 @@ class ElMoney extends Phpfox_Service
         }
     }
 
+    public function reduceBalance($iUserId, $iBalance)
+    {
+        $iCurrBalance = $this->getUserBalance($iUserId);
+        $sCacheId = $this->cache()->set(['elmoney_user_balance', $iUserId]);
+        $this->cache()->remove($sCacheId);
+        return $this->database()->update(Phpfox::getT('elmoney_user_balance'), [
+            'balance' => $iCurrBalance - $iBalance,
+        ],
+            'user_id = ' . $iUserId);
+    }
+
     public function getUserBalance($iUserId = null)
     {
         static $aCache = [];
@@ -110,7 +121,7 @@ class ElMoney extends Phpfox_Service
             $sCacheId = $this->cache()->set(['elmoney_user_balance', $iUserId]);
             $iBalance = $this->cache()->get($sCacheId);
             if (empty($iBalance)) {
-                $iBalance = (int)$this->database()
+                $iBalance = $this->database()
                     ->select('balance')
                     ->from(Phpfox::getT('elmoney_user_balance'))
                     ->where('user_id = ' . $iUserId)
@@ -121,5 +132,10 @@ class ElMoney extends Phpfox_Service
             $aCache[$iUserId] = $iBalance;
         }
         return is_bool($aCache[$iUserId]) ? 0 : $aCache[$iUserId];
+    }
+
+    public function currency($iAmount)
+    {
+        return $iAmount . ' ' . $this->oSetting['currency_code'];
     }
 }

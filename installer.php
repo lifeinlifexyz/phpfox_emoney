@@ -10,7 +10,7 @@ $oInstaller->onInstall(function() use ($oInstaller){
 
     $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_user_balance') . '` (
       `user_id` int(12) NOT NULL DEFAULT \'0\',
-      `balance`  int(12)  NOT NULL DEFAULT \'0\',
+      `balance`  DECIMAL( 14, 2 )  NOT NULL DEFAULT \'0\',
       PRIMARY KEY (`user_id`)
     );');
 
@@ -21,6 +21,7 @@ $oInstaller->onInstall(function() use ($oInstaller){
       `user_id` int(11) NOT NULL,
       `balance` int(11) NOT NULL,
       `product_name` varchar(255) NOT NULL,
+      `amount` DECIMAL(14,2) NOT NULL DEFAULT  \'0.00\',
       `data` text NOT NULL,
       PRIMARY KEY (`history_id`),
       KEY `action` (`action`,`user_id`)
