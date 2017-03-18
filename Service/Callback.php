@@ -59,7 +59,8 @@ class Callback extends \Phpfox_Service
             'action' => 'add_funds',
             'user_id' => $iUserId,
             'product_name' => _p('Buy ' . Phpfox::getService('elmoney.settings')->get('currency_code')),
-            'balance' => Phpfox::getService('elmoney')->getUserBalance($iUserId)
+            'amount' => $iBalance,
+            'balance' => Phpfox::getService('elmoney')->getUserBalance($iUserId),
         ];
         Phpfox::log('Add history: ' . var_export($aVal, true));
         Phpfox::getService('elmoney.history')->add($aVal);

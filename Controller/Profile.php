@@ -23,7 +23,7 @@ class Profile extends \Phpfox_Component
                     'action' => $this->url()->makeUrl('profile.elmoney'),
                     'default_value' => _p('Comment'),
                     'name' => 'search',
-//                    'field' => ['`cp`.`item_name`', '`cp`.`item_number`', '`cp`.`payment_id`', '`cp`.`status`', '`cp`.`amount`']
+                    'field' => ['`eh`.`product_name`', '`eh`.`comment`']
                 ],
                 'sort' => [
                     'latest' => ['eh.history_id', _p('Latest')],
@@ -42,17 +42,31 @@ class Profile extends \Phpfox_Component
             'hide_view' => []
         ];
 
+        $aSectionMenu = [
+            _p('Replenishment') => 'profile.elmoney',
+            _p('My Files') => 'digitaldownload.my',
+            _p('Friends` Files') => 'digitaldownload.friends',
+            _p('Invoices') => 'digitaldownload.invoice',
+        ];
+
+        \Phpfox_Template::instance()->buildSectionMenu('elmoney', $aSectionMenu);
+
         $this->search()->setCondition(' AND `eh`.`user_id` = ' . Phpfox::getUserId());
-        $this->search()->setCondition(' AND `eh`.`action` = \'add_funds\'');
-//
+
+        switch($this->request()->get('reg3')) {
+            default:
+                $this->search()->setCondition(' AND `eh`.`action` = \'add_funds\'');
+
+        }
+
         $this->search()->setContinueSearch(true);
         $this->search()->browse()->params($aBrowseParams)->execute();
-//
+
         $this->template()
             ->setTitle(_p('Replenishment'))
             ->setBreadCrumb(_p('Replenishment'))
             ->assign([
-            'aPayments' => $this->search()->browse()->getRows()
+            'aItems' => $this->search()->browse()->getRows()
         ]);
 
 

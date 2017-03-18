@@ -64,16 +64,6 @@ defined('PHPFOX') or exit('NO DICE!');
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">
-                {_p('Comment')}:
-            </label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="val[comment]"></textarea>
-            </div>
-            <div class="clear"></div>
-        </div>
-
-        <div class="form-group">
             <label class="col-sm-2 control-label">&nbsp;</label>
             <div class="col-sm-10">
                 <input class="btn btn-primary" type="submit" value="{_p('Forward')}">
