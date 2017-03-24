@@ -22,25 +22,19 @@ class Callback extends \Phpfox_Service
     {
         Phpfox::log('Module callback recieved: ' . var_export($aParams, true));
         Phpfox::log('Attempting to retrieve purchase from the database');
-        $aUserBalance = explode('_', $aParams['item_number']);
-
-        if (count($aUserBalance) != 2) {
+        if (!($aInvoice = Phpfox::getService('elmoney.trunsaction')->get($aParams['item_number']))){
             Phpfox::log('Not a valid invoice');
             return false;
         }
-        $iUserId = $aUserBalance[0];
-        $iBalance = $aUserBalance[1];
 
-        Phpfox::log('Purchase is valid: ' . var_export($aUserBalance, true));
-        defined('PHPFOX_APP_USER_ID') || define('PHPFOX_APP_USER_ID', $iUserId);
+        Phpfox::log('Purchase is valid: ' . var_export($aInvoice, true));
 
-        $sUserCurrency = Phpfox::getService('user')->getCurrency();
+        $iUserId = $aInvoice['buyer_id'];
+        $iBalance = $aInvoice['amount'];
 
         if ($aParams['status'] == 'completed') {
-            $iCommission = Phpfox::getService('elmoney')->getCommission($iBalance);
-            $iPrice = Phpfox::getService('elmoney')->convertTo($iBalance + $iCommission, $sUserCurrency);
 
-            if ($aParams['total_paid'] == $iPrice) {
+            if ($aParams['total_paid'] == $aInvoice['cost']) {
                 Phpfox::log('Paid correct price');
             } else {
                 Phpfox::log('Paid incorrect price');
@@ -54,16 +48,13 @@ class Callback extends \Phpfox_Service
         }
 
         Phpfox::log('Handling purchase');
-        Phpfox::getService('elmoney')->addBalanceToUser($iUserId, $iBalance);
-        $aVal = [
-            'action' => 'add_funds',
-            'user_id' => $iUserId,
-            'product_name' => _p('Buy ' . Phpfox::getService('elmoney.settings')->get('currency_code')),
-            'amount' => $iBalance,
-            'balance' => Phpfox::getService('elmoney')->getUserBalance($iUserId),
-        ];
-        Phpfox::log('Add history: ' . var_export($aVal, true));
-        Phpfox::getService('elmoney.history')->add($aVal);
+        $iBalance = Phpfox::getService('elmoney')->addBalanceToUser($iUserId, $iBalance);
+
+        Phpfox::getService('elmoney.trunsaction')->update($aInvoice['transaction_id'], [
+            'status' => 'completed',
+            'buyer_balance' => $iBalance,
+            'time_stamp' => PHPFOX_TIME,
+        ]);
         Phpfox::log('Handling complete');
         return true;
     }

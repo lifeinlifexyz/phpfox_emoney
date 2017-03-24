@@ -13,8 +13,26 @@ class Ajax extends Phpfox_Ajax
         $sUserCurrency = Phpfox::getService('user')->getCurrency();
         $aVal = (array)$this->get('val');
         $iBalance = (int) $aVal['amount'];
+
         $iCommission = Phpfox::getService('elmoney')->getCommission($iBalance);
         $iPrice = Phpfox::getService('elmoney')->convertTo($iBalance + $iCommission, $sUserCurrency);
+
+        $sItemName = 'Add funds to user account';
+        $iTrId = Phpfox::getService('elmoney.trunsaction')->add([
+            'is_add_funds' => true,
+            'buyer_id' => Phpfox::getUserId(),
+            'elmoney_seller_id' => 0,
+            'amount' => $iBalance,
+            'cost' => $iPrice,
+            'item_name' => $sItemName,
+            'comment' => $aVal['comment'],
+            'currency_code' => $sUserCurrency,
+        ]);
+
+        $aItemNumber = 'elmoney|' . $iTrId;
+        Phpfox::getService('elmoney.trunsaction')->update($iTrId, [
+            'item_number' => $aItemNumber
+        ]);
 
         $aAdminGateways = Phpfox::getService('api.gateway')->getActive();
         $aGateways = [];
@@ -25,11 +43,11 @@ class Ajax extends Phpfox_Ajax
         }
 
         $aPurchaseDetails = [
-            'item_number' => 'elmoney|' . Phpfox::getUserId() . '_' . $iBalance,
+            'item_number' => $aItemNumber,
             'currency_code' => $sUserCurrency,
             'amount' => $iPrice,
             'return' => \Phpfox_Url::instance()->makeUrl('profile.elmoney', ['payment' => 'done']),
-            'item_name' => empty($aVal['comment']) ? _p('Add funds'): $aVal['comment'],
+            'item_name' => $sItemName,
             'recurring' => '',
             'recurring_cost' => '',
             'alternative_cost' => '',
@@ -53,7 +71,18 @@ class Ajax extends Phpfox_Ajax
         $sContent = $this->getContent();
         $this->call('$("#elmoney-add-funds").hide();');
         $this->call('$("#gateways .gateways").html("' . $sContent . '");');
+        $this->call('$("#gateways").data("id",' . $iTrId . ');');
         $this->call('$("#gateways").show();');
+    }
+
+    public function cancelAddFund()
+    {
+        Phpfox::isUser(true);
+        $iId = $this->get('id');
+        $aTrans = Phpfox::getService('elmoney.trunsaction')->get($iId);
+        if ($aTrans['buyer_id'] == Phpfox::getUserId()) {
+            Phpfox::getService('elmoney.trunsaction')->delete($iId);
+        }
     }
 
 

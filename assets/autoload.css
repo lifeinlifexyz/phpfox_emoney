@@ -1,0 +1,28 @@
+.cm-em-table-row {
+    display: table-row;
+}
+
+.cm-em-table-cell {
+    display: table-cell;
+    text-align: left;
+    padding: 10px;
+    line-height: 1.42857143;
+    border-top: 1px solid #f0f0f0;
+    vertical-align: top;
+}
+
+.cm-em-table-cell:first-child {
+    padding-left: 30px !important;
+}
+
+.cm-em-table-row:nth-of-type(odd) .cm-em-table-cell {
+    background: #f4f4f4;
+}
+
+.cm-em-table-row.cm-em-table-head .cm-em-table-cell {
+    background-color: #fff;
+    vertical-align: middle;
+    font-weight: 500;
+    color: #333;
+    text-transform: uppercase;
+}

@@ -6,7 +6,7 @@
         'elmoney' => 'Apps\CM_ElMoney\Service\ElMoney',
         'elmoney.callback' => 'Apps\CM_ElMoney\Service\Callback',
         'elmoney.payments' => 'Apps\CM_ElMoney\Service\Payments',
-        'elmoney.history' => 'Apps\CM_ElMoney\Service\History',
+        'elmoney.trunsaction' => 'Apps\CM_ElMoney\Service\Trunsaction',
         'elmoney.browse' => 'Apps\CM_ElMoney\Service\Browse',
     ])
     ->addComponentNames('controller', [
@@ -44,6 +44,7 @@ group('/elmoney/', function(){
 
     if (CM_EL_MONEY_IS_ACTIVE) {
         route('profile', 'elmoney.profile');
+        route('profile.purchase', 'elmoney.profile');
         route('funds/add', 'elmoney.funds.add');
         route('pay', 'elmoney.pay');
     }

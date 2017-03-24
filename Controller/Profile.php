@@ -13,60 +13,64 @@ class Profile extends \Phpfox_Component
         Phpfox::isUser(true);
 
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
-
-        $aSearchFields = array(
-            'type' => 'elmoney',
-            'field' => 'eh.history_id',
-            'search_tool' => [
-                'table_alias' => 'eh',
-                'search' => [
-                    'action' => $this->url()->makeUrl('profile.elmoney'),
-                    'default_value' => _p('Comment'),
-                    'name' => 'search',
-                    'field' => ['`eh`.`product_name`', '`eh`.`comment`']
-                ],
-                'sort' => [
-                    'latest' => ['eh.history_id', _p('Latest')],
-                ],
-                'show' => [12, 15, 18, 21]
-            ]
-        );
-
-        $this->search()->set($aSearchFields);
-//
-        $aBrowseParams = [
-            'module_id' => 'elmoney',
-            'alias' => 'eh',
-            'field' => 'history_id',
-            'table' => Phpfox::getT('elmoney_history'),
-            'hide_view' => []
-        ];
+        $sView = $this->request()->get('view');
 
         $aSectionMenu = [
-            _p('Replenishment') => 'profile.elmoney',
-            _p('My Files') => 'digitaldownload.my',
-            _p('Friends` Files') => 'digitaldownload.friends',
-            _p('Invoices') => 'digitaldownload.invoice',
+            _p('Replenishment history') => '',
+            _p('Purchase history') => 'purchase',
+            _p('Sale history') => 'sold',
         ];
 
-        \Phpfox_Template::instance()->buildSectionMenu('elmoney', $aSectionMenu);
+        \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', $aSectionMenu);
 
-        $this->search()->setCondition(' AND `eh`.`user_id` = ' . Phpfox::getUserId());
 
-        switch($this->request()->get('reg3')) {
+        switch($sView) {
+            case 'purchase':
+                $this->search()->setCondition(' AND `tr`.`buyer_id` = ' . Phpfox::getUserId());
+                $sTitle = _p('El Money');
+                $sUserField = 'seller_id';
+                break;
+            case 'sold':
+                $this->search()->setCondition(' AND `tr`.`seller_id` = ' . Phpfox::getUserId());
+                $sUserField = 'buyer_id';
+                $sTitle = _p('El Money');
+                break;
             default:
-                $this->search()->setCondition(' AND `eh`.`action` = \'add_funds\'');
+                $this->search()->setCondition(' AND `tr`.`buyer_id` = ' . Phpfox::getUserId());
+                $this->search()->setCondition(' AND `tr`.`is_add_funds` = \'1\'');
+                $sTitle = _p('Replenishment history');
+                $sUserField = 'buyer_id';
 
         }
 
-        $this->search()->setContinueSearch(true);
-        $this->search()->browse()->params($aBrowseParams)->execute();
+        $aSearchFields = [
+            'type' => 'browse',
+            'field' => 'tr.transaction_id',
+            'search_tool' => [
+                'when_field' => 'time_stamp',
+                'table_alias' => 'tr',
+                'search' => [
+                    'action' => $this->url()->makeUrl('profile.elmoney', ['view' => 'purchase']),
+                    'default_value' => _p('Comment'),
+                    'name' => 'search',
+                    'field' => ['`tr`.`item_name`', '`tr`.`item_number`', '`tr`.`comment`']
+                ],
+                'sort' => [
+                    'latest' => ['tr.transaction_id', _p('Latest')],
+                ],
+                'show' => [12, 15, 18, 21]
+            ]
+        ];
 
+        $oSearch = \Phpfox::getLib('search')->set($aSearchFields);
+
+        $aItems =  Phpfox::getService('elmoney.browse')->setSearch($oSearch)->get($sUserField);
         $this->template()
-            ->setTitle(_p('Replenishment'))
-            ->setBreadCrumb(_p('Replenishment'))
+            ->setTitle($sTitle)
+            ->setBreadCrumb($sTitle)
             ->assign([
-            'aItems' => $this->search()->browse()->getRows()
+            'aItems' => $aItems,
+            'sView' => $sView,
         ]);
 
 

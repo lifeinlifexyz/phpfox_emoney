@@ -14,17 +14,25 @@ $oInstaller->onInstall(function() use ($oInstaller){
       PRIMARY KEY (`user_id`)
     );');
 
-    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_history') . '` (
-      `history_id` int(11) NOT NULL AUTO_INCREMENT,
-      `action` varchar(15) NOT NULL,
-      `time_stamp` int(12) NOT NULL,
-      `user_id` int(11) NOT NULL,
-      `balance` int(11) NOT NULL,
-      `product_name` varchar(255) NOT NULL,
-      `amount` DECIMAL(14,2) NOT NULL DEFAULT  \'0.00\',
-      `data` text NOT NULL,
-      PRIMARY KEY (`history_id`),
-      KEY `action` (`action`,`user_id`)
+    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_trunsactions') . '` (
+      `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+      `item_name` varchar(500) NOT NULL,
+      `Item_number` varchar(300) NOT NULL,
+      `cost` decimal(14,2) NOT NULL,
+      `currency` varchar(5) NOT NULL,
+      `type` varchar(10) NOT NULL,
+      `status` varchar(20) NOT NULL,
+      `buyer_id` int(11) NOT NULL,
+      `seller_id` int(11) NOT NULL,
+      `amount` decimal(14,2) NOT NULL,
+      `comment` text NOT NULL,
+      `buyer_balance` decimal(14,2) NOT NULL,
+      `seller_balance` decimal(14,2) NOT NULL,
+      `time_stamp` int(12) DEFAULT NULL,
+      `is_add_funds` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
+      PRIMARY KEY (`transaction_id`),
+      KEY `is_add_funds` (`is_add_funds`),
+      KEY `Item_number` (`item_number`,`buyer_id`,`seller_id`)
     )');
 
     $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_payments') . '` (
