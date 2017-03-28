@@ -80,6 +80,27 @@ class ElMoney extends Phpfox_Service
         return $this->aCommissions;
     }
 
+    public function setBalanceToUser($iUserId, $iBalance)
+    {
+        $sTable = Phpfox::getT('elmoney_user_balance');
+        $aUserBalanse = $this->database()
+            ->select('*')
+            ->from($sTable)
+            ->where('user_id = ' . $iUserId)
+            ->get();
+
+        if (empty($aUserBalanse)) {
+            $this->database()->insert($sTable, ['balance' => $iBalance, 'user_id' => $iUserId]);
+        } else {
+            $this->database()->update($sTable, ['balance' => $iBalance], 'user_id = ' . $iUserId);
+        }
+
+        $sCacheId = $this->cache()->set(['elmoney_user_balance', $iUserId]);
+        $this->cache()->remove($sCacheId);
+        unset(self::$aCache[$iUserId]);
+        return $this->getUserBalance($iUserId);
+    }
+
     public function addBalanceToUser($iUserId, $iBalance)
     {
         $sTable = Phpfox::getT('elmoney_user_balance');

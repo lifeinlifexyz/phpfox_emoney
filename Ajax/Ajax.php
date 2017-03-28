@@ -85,5 +85,14 @@ class Ajax extends Phpfox_Ajax
         }
     }
 
-
+    public function setBalance()
+    {
+        Phpfox::isAdmin(true);
+        $iUserId = (int) $this->get('user_id');
+        $iBalance = $this->get('balance');
+        Phpfox::getService('elmoney')->setBalanceToUser($iUserId, $iBalance);
+        $this->call('$("#user-' . $iUserId . ' .elmoney-balance *").removeAttr("disabled");');
+        $this->call('$("#user-' . $iUserId . ' .elmoney-balance form").removeClass("disabled");');
+        $this->call('$(".ajax_processing").remove();');
+    }
 }

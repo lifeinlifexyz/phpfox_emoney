@@ -26,3 +26,16 @@
     color: #333;
     text-transform: uppercase;
 }
+
+.el_money_user_block_search {
+    width: 20%;
+    background: #ffffff;
+    float: right;
+}
+.el_money_user_block_search .text-center {
+    text-align: center !important;
+}
+
+.elmoney-balance-value {
+    max-width: 120px;
+}

@@ -12,6 +12,7 @@
     ->addComponentNames('controller', [
         'elmoney.admincp.gateway.settings' => 'Apps\CM_ElMoney\Controller\Admin\Gateway\Settings',
         'elmoney.admincp.settings' => 'Apps\CM_ElMoney\Controller\Admin\Settings',
+        'elmoney.admincp.funds.manage' => 'Apps\CM_ElMoney\Controller\Admin\ManageFunds',
     ])->addComponentNames('ajax', [
         'elmoney.ajax'        => '\Apps\CM_ElMoney\Ajax\Ajax',
     ])
@@ -20,9 +21,18 @@
         'elmoney' => PHPFOX_DIR_SITE_APPS . 'CM_ElMoney' . PHPFOX_DS . 'views',
     ]);
 
+
+/**
+ * template modifier
+ */
+function el_money_currency($iAmount) {
+    return Phpfox::getService('elmoney')->currency($iAmount);
+}
+
 group('/admincp/elmoney/', function(){
     route('gateway/settings', 'elmoney.admincp.gateway.settings');
     route('settings', 'elmoney.admincp.settings');
+    route('funds/manage', 'elmoney.admincp.funds.manage');
 });
 
 defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getService('elmoney')->isActive());
@@ -41,6 +51,7 @@ if(CM_EL_MONEY_IS_ACTIVE) {
 group('/elmoney/', function(){
     route('gateway/setting/save', 'elmoney.admincp.gateway.settings');
     route('setting/save', 'elmoney.admincp.settings');
+    route('admincp/funds/add', 'elmoney.admincp.funds.add');
 
     if (CM_EL_MONEY_IS_ACTIVE) {
         route('profile', 'elmoney.profile');

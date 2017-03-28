@@ -7,8 +7,10 @@
   "vendor": "<a href=\"//codemake.org\" target=\"_blank\">CodeMake.Org</a> - See all our products <a href=\"//store.phpfox.com/techie/u/ecodemaster\" target=_new>HERE</a> - contact us at: support@codemake.org",
   "admincp_menu": {
     "Settings": "elmoney.settings",
-    "Gateway Settings": "elmoney.gateway.settings"
+    "Gateway Settings": "elmoney.gateway.settings",
+    "Manage user balance": "elmoney.funds.manage"
   },
+  "admincp_route": "/admincp/elmoney/funds/manage",
   "component" : {
     "block" : {
       "balance" : ""

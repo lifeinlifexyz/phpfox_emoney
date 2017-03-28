@@ -18,7 +18,7 @@ defined('PHPFOX') or exit('NO DICE!');
         {/if}
         {foreach from=$aItems item=aItem}
         <div class="cm-em-table-row">
-            <div class="cm-em-table-cell">{$aItem.amount}</div>
+            <div class="cm-em-table-cell">{$aItem.amount|el_money_currency}</div>
             <div class="cm-em-table-cell">{$aItem.time_stamp|convert_time}</div>
             <div class="cm-em-table-cell">{$aItem.status}</div>
             <div class="cm-em-table-cell">{$aItem.comment}</div>

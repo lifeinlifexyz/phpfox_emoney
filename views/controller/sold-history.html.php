@@ -15,11 +15,11 @@ defined('PHPFOX') or exit('NO DICE!');
 {foreach from=$aItems item=aItem}
 <div class="cm-em-table-row">
     <div class="cm-em-table-cell">{$aItem.item_name}</div>
-    <div class="cm-em-table-cell">{$aItem.amount}</div>
+    <div class="cm-em-table-cell">{$aItem.amount|el_money_currency}</div>
     <div class="cm-em-table-cell">{$aItem|user:'':'':50}</div>
     <div class="cm-em-table-cell">{$aItem.time_stamp|convert_time}</div>
     <div class="cm-em-table-cell">{$aItem.comment}</div>
-    <div class="cm-em-table-cell">{$aItem.seller_balance}</div>
+    <div class="cm-em-table-cell">{$aItem.seller_balance|el_money_currency}</div>
 </div>
 {/foreach}
 {pager}

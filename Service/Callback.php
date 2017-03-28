@@ -66,6 +66,22 @@ class Callback extends \Phpfox_Service
     }
 
     /**
+     * on users browse
+     */
+    public function getBrowseQueryCnt()
+    {}
+
+    /**
+     * on users browse
+     */
+    public function getBrowseQuery()
+    {
+        $this->database()
+            ->select('`ub`.`balance` as user_el_balance, ')
+            ->leftJoin(\Phpfox::getT('elmoney_user_balance'), '`ub`', '`u`.`user_id` = `ub`.`user_id`');
+    }
+
+    /**
      * If a call is made to an unknown method attempt to connect
      * it to a specific plug-in with the same name thus allowing
      * plug-in developers the ability to extend classes.
