@@ -88,7 +88,7 @@ defined('PHPFOX') or exit('NO DICE!');
     $Behavior.elmoney_add_funds = function() {
         var form = $('#elmoney-add-funds');
 
-        var aRawCommission = form.find('form').data('commission');
+        var aRawCommission = form.find('form').data('commission').add_funds;
         var aCommission = [];
         for(var i in aRawCommission) {
             var sRawCommission = aRawCommission[i];
@@ -114,7 +114,7 @@ defined('PHPFOX') or exit('NO DICE!');
                 }
             }
 
-            return false;
+            return 0;
         }
 
         $('#add-fund-back').off('click').on('click', function(){

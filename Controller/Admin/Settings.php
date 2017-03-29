@@ -22,7 +22,10 @@ class Settings extends \Phpfox_Component
         $sCommission = $oSetting['commissions'];
         $aForms = [
             'currency_code' => $oSetting['currency_code'],
-            'commissions' => empty($sCommission) ? [''] : json_decode($oSetting['commissions'], true),
+            'commissions' => empty($sCommission) ? [
+                'add_funds' => [''],
+                'send_to_friend' => [''],
+            ] : json_decode($oSetting['commissions'], true),
         ];
 
         $aCurrencies = Phpfox::getService('core.currency')->get();
@@ -47,12 +50,20 @@ class Settings extends \Phpfox_Component
 
         if (($aVals = $this->request()->getArray('val')))
         {
-            $aNewCommissions = $aVals['commissions'];
+            $aNewCommissions = $aVals['commissions']['add_funds'];
             foreach($aNewCommissions as $sCommission) {
                 if (!preg_match('/^\d{1,}:\d{1,}\|\d{1,}$/', $sCommission)) {
                     \Phpfox_Error::set(_p('Commission format must be digit:digit|digit'));
                 }
             }
+
+            $aNewCommissions = $aVals['commissions']['send_to_friend'];
+            foreach($aNewCommissions as $sCommission) {
+                if (!preg_match('/^\d{1,}:\d{1,}\|\d{1,}$/', $sCommission)) {
+                    \Phpfox_Error::set(_p('Commission format must be digit:digit|digit'));
+                }
+            }
+
             $aForms = $aVals;
             if ($oValidator->isValid($aVals)) {
                 $aVals['commissions'] = json_encode($aVals['commissions']);

@@ -33,13 +33,13 @@ defined('PHPFOX') or exit('NO DICE!');
 
     <div class="table form-group">
         <div class="table_left">
-            {_p('Commission of project(Fields format "from:to|Commission")')}:
+            {_p('Commission for adding balance(Fields format "from:to|Commission")')}:
         </div>
         <div class="table_right">
-            <div id="commissions" data-phrase-remove="{_p('Remove')}">
-                {foreach from=$aForms.commissions key=iKey item=sCommission}
+            <div class="commissions" data-phrase-remove="{_p('Remove')}">
+                {foreach from=$aForms.commissions.add_funds key=iKey item=sCommission}
                     <p class="commission-item">
-                        <input type="text" class="form-control" name="val[commissions][]" value="{$sCommission}" size="40" placeholder="1:10|1"/>
+                        <input type="text" class="form-control" name="val[commissions][add_funds][]" value="{$sCommission}" size="40" placeholder="1:10|1"/>
                         {if $iKey != 0}
                             <a class="commission-item-del" href="#">{_p('Remove')}</a>
                         {/if}
@@ -47,7 +47,30 @@ defined('PHPFOX') or exit('NO DICE!');
                     </p>
                 {/foreach}
             </div>
-            <a id="add-new-field" class="settings_actions_link btn btn-success">
+            <a class="add-new-field settings_actions_link btn btn-success">
+                <i class="fa fa-plus"></i>&nbsp;{_p('Add')}
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="table form-group">
+        <div class="table_left">
+            {_p('Commission for send to friend(Fields format "from:to|Commission")')}:
+        </div>
+        <div class="table_right">
+            <div class="commissions" data-phrase-remove="{_p('Remove')}">
+                {foreach from=$aForms.commissions.send_to_friend key=iKey item=sCommission}
+                <p class="commission-item">
+                    <input type="text" class="form-control" name="val[commissions][send_to_friend][]" value="{$sCommission}" size="40" placeholder="1:10|1"/>
+                    {if $iKey != 0}
+                    <a class="commission-item-del" href="#">{_p('Remove')}</a>
+                    {/if}
+                    <br>
+                </p>
+                {/foreach}
+            </div>
+            <a class="add-new-field settings_actions_link btn btn-success">
                 <i class="fa fa-plus"></i>&nbsp;{_p('Add')}
             </a>
         </div>
@@ -69,16 +92,14 @@ defined('PHPFOX') or exit('NO DICE!');
             return false;
         }
 
-        var container = $('#commissions');
-
-        $('#add-new-field').off('click').on('click', function() {
+        $('.add-new-field').off('click').on('click', function() {
+            var container = $(this).closest('.table_right').find('.commissions');
             var input = container.find('.commission-item:first-child').clone();
-
-            if ($('.commission-item').length > 0) {
+            if (container.find('.commission-item').length > 0) {
                 var delLink = '<a class="commission-item-del" href="#">' + container.data('phraseRemove') + '</a>';
                 $(delLink).insertAfter(input.find('input'));
             }
-            input.appendTo('#commissions');
+            container.append(input);
 
             $('.commission-item-del').off('click').on('click', function(e){
                 remove(e);
@@ -88,7 +109,6 @@ defined('PHPFOX') or exit('NO DICE!');
         $('.commission-item-del').off('click').on('click', function(e){
             remove(e);
         });
-
     }
 </script>
 {/literal}

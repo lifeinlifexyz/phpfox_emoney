@@ -42,6 +42,7 @@ if(CM_EL_MONEY_IS_ACTIVE) {
         'elmoney.profile' => 'Apps\CM_ElMoney\Controller\Profile',
         'elmoney.pay' => 'Apps\CM_ElMoney\Controller\Pay',
         'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
+        'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
     ])
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
@@ -56,6 +57,7 @@ group('/elmoney/', function(){
     if (CM_EL_MONEY_IS_ACTIVE) {
         route('profile', 'elmoney.profile');
         route('profile.purchase', 'elmoney.profile');
+        route('sendtofriend', 'elmoney.sendtofriend');
         route('funds/add', 'elmoney.funds.add');
         route('pay', 'elmoney.pay');
     }

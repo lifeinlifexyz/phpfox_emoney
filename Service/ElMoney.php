@@ -47,9 +47,9 @@ class ElMoney extends Phpfox_Service
         return $iSumm + $this->getCommission($iSumm);
     }
 
-    public function getCommission($iAmount)
+    public function getCommission($iAmount, $sType = 'add_funds')
     {
-        $aComm = $this->getCommissions();
+        $aComm = $this->getCommissions($sType);
         foreach($aComm as &$aItem) {
             if ($aItem['from'] <= $iAmount && $aItem['to'] >= $iAmount) {
                 return $aItem['commission'];
@@ -58,13 +58,13 @@ class ElMoney extends Phpfox_Service
         return 0;
     }
 
-    public function getCommissions()
+    public function getCommissions($sType = 'add_funds')
     {
         if (empty($this->aCommissions)) {
             $sCommissions = $this->oSetting['commissions'];
             $aRawCommission = json_decode($sCommissions, true);
 
-            foreach($aRawCommission as $sRawCommission) {
+            foreach($aRawCommission[$sType] as $sRawCommission) {
                 $aComm = explode('|', $sRawCommission);
                 $iComm = array_pop($aComm);
                 $aComm = explode(':', $aComm[0]);
@@ -103,6 +103,10 @@ class ElMoney extends Phpfox_Service
 
     public function addBalanceToUser($iUserId, $iBalance)
     {
+        $sCacheId = $this->cache()->set(['elmoney_user_balance', $iUserId]);
+        $this->cache()->remove($sCacheId);
+        unset(self::$aCache[$iUserId]);
+
         $sTable = Phpfox::getT('elmoney_user_balance');
         $aUserBalanse = $this->database()
             ->select('*')
@@ -115,24 +119,21 @@ class ElMoney extends Phpfox_Service
         } else {
             $this->database()->update($sTable, ['balance' => $aUserBalanse['balance'] + $iBalance], 'user_id = ' . $iUserId);
         }
-
-        $sCacheId = $this->cache()->set(['elmoney_user_balance', $iUserId]);
-        $this->cache()->remove($sCacheId);
-        unset(self::$aCache[$iUserId]);
         return $this->getUserBalance($iUserId);
     }
 
     public function reduceBalance($iUserId, $iBalance)
     {
         $iCurrBalance = $this->getUserBalance($iUserId);
-        $this->database()->update(Phpfox::getT('elmoney_user_balance'), [
-            'balance' => $iCurrBalance - $iBalance,
-        ],
-            'user_id = ' . $iUserId);
 
         $sCacheId = $this->cache()->set(['elmoney_user_balance', $iUserId]);
         $this->cache()->remove($sCacheId);
         unset(self::$aCache[$iUserId]);
+
+        $this->database()->update(Phpfox::getT('elmoney_user_balance'), [
+            'balance' => $iCurrBalance - $iBalance,
+        ],
+            'user_id = ' . $iUserId);
 
         return $this->getUserBalance($iUserId);
     }
@@ -166,5 +167,21 @@ class ElMoney extends Phpfox_Service
     public function currency($iAmount)
     {
         return $iAmount . ' ' . $this->oSetting['currency_code'];
+    }
+
+    public function getSectionMenu()
+    {
+        $aMenu =  [
+            _p('Replenishment history') => '',
+            _p('Purchase history') => 'purchase',
+            _p('Sale history') => 'sold',
+        ];
+
+        if (Phpfox::isModule('friend')) {
+            $aMenu[_p('Send to a friend')] = 'elmoney.sendtofriend';
+        }
+
+        return $aMenu;
+
     }
 }

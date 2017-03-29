@@ -20,8 +20,8 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
 
     public function save($aVals)
     {
-        $this->_save($aVals);
         $this->cache()->remove($this->sCacheId);
+        $this->_save($aVals);
         return $this;
     }
 

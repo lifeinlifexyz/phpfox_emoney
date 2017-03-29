@@ -15,11 +15,7 @@ class Profile extends \Phpfox_Component
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
         $sView = $this->request()->get('view');
 
-        $aSectionMenu = [
-            _p('Replenishment history') => '',
-            _p('Purchase history') => 'purchase',
-            _p('Sale history') => 'sold',
-        ];
+        $aSectionMenu = Phpfox::getService('elmoney')->getSectionMenu();
 
         \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', $aSectionMenu);
 
