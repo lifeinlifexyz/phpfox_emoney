@@ -77,6 +77,29 @@ defined('PHPFOX') or exit('NO DICE!');
         <div class="clear"></div>
     </div>
 
+    <div class="table form-group">
+        <div class="table_left">
+            {_p('Withdrawal Commission(Fields format "from:to|Commission")')}:
+        </div>
+        <div class="table_right">
+            <div class="commissions" data-phrase-remove="{_p('Remove')}">
+                {foreach from=$aForms.commissions.withdraw key=iKey item=sCommission}
+                <p class="commission-item">
+                    <input type="text" class="form-control" name="val[commissions][withdraw][]" value="{$sCommission}" size="40" placeholder="1:10|1"/>
+                    {if $iKey != 0}
+                    <a class="commission-item-del" href="#">{_p('Remove')}</a>
+                    {/if}
+                    <br>
+                </p>
+                {/foreach}
+            </div>
+            <a class="add-new-field settings_actions_link btn btn-success">
+                <i class="fa fa-plus"></i>&nbsp;{_p('Add')}
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
     <div class="table_clear">
         <input type="submit" value="{_p('Save')}" class="button btn-primary" />
     </div>

@@ -25,6 +25,7 @@ class Settings extends \Phpfox_Component
             'commissions' => empty($sCommission) ? [
                 'add_funds' => [''],
                 'send_to_friend' => [''],
+                'withdraw' => [''],
             ] : json_decode($oSetting['commissions'], true),
         ];
 
@@ -58,6 +59,13 @@ class Settings extends \Phpfox_Component
             }
 
             $aNewCommissions = $aVals['commissions']['send_to_friend'];
+            foreach($aNewCommissions as $sCommission) {
+                if (!preg_match('/^\d{1,}:\d{1,}\|\d{1,}$/', $sCommission)) {
+                    \Phpfox_Error::set(_p('Commission format must be digit:digit|digit'));
+                }
+            }
+
+            $aNewCommissions = $aVals['commissions']['withdraw'];
             foreach($aNewCommissions as $sCommission) {
                 if (!preg_match('/^\d{1,}:\d{1,}\|\d{1,}$/', $sCommission)) {
                     \Phpfox_Error::set(_p('Commission format must be digit:digit|digit'));
