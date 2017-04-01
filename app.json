@@ -14,10 +14,29 @@
   "admincp_route": "/admincp/elmoney/funds/manage",
   "component" : {
     "block" : {
-      "balance" : ""
+      "balance" : "",
+      "currency" : ""
     },
     "controller" : {
       "profile" : "elmoney.profile"
+    }
+  },
+  "component_block" : {
+    "Balance" : {
+      "type_id" : "0",
+      "m_connection" : "elmoney",
+      "component" : "balance",
+      "location" : "1",
+      "is_active" : "1",
+      "ordering" : "3"
+    },
+    "Currency" : {
+      "type_id" : "0",
+      "m_connection" : "elmoney",
+      "component" : "currency",
+      "location" : "1",
+      "is_active" : "1",
+      "ordering" : "4"
     }
   }
 }

@@ -95,4 +95,17 @@ class Ajax extends Phpfox_Ajax
         $this->call('$("#user-' . $iUserId . ' .elmoney-balance form").removeClass("disabled");');
         $this->call('$(".ajax_processing").remove();');
     }
+
+    /**
+     * @return object
+     */
+    public function changeCurrency()
+    {
+        Phpfox::isUser(true);
+        if (!empty($this->get('update'))) {
+            $sCurrency = $this->get('currency');
+            Phpfox::getService('user.field.process')->update(Phpfox::getUserId(), 'default_currency', (empty($sCurrency) ? null :$sCurrency));
+            cache()->del(['currency', Phpfox::getUserId()]);
+        }
+    }
 }

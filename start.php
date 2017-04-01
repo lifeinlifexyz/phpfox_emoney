@@ -53,6 +53,7 @@ if(CM_EL_MONEY_IS_ACTIVE) {
     ])
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
+        'elmoney.currency' => 'Apps\CM_ElMoney\Block\Currency',
     ]);
 }
 
