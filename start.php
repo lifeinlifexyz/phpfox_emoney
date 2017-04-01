@@ -8,11 +8,15 @@
         'elmoney.payments' => 'Apps\CM_ElMoney\Service\Payments',
         'elmoney.trunsaction' => 'Apps\CM_ElMoney\Service\Trunsaction',
         'elmoney.browse' => 'Apps\CM_ElMoney\Service\Browse',
+        'elmoney.withdraw' => 'Apps\CM_ElMoney\Service\Withdraw',
     ])
     ->addComponentNames('controller', [
         'elmoney.admincp.gateway.settings' => 'Apps\CM_ElMoney\Controller\Admin\Gateway\Settings',
         'elmoney.admincp.settings' => 'Apps\CM_ElMoney\Controller\Admin\Settings',
         'elmoney.admincp.funds.manage' => 'Apps\CM_ElMoney\Controller\Admin\ManageFunds',
+        'elmoney.admincp.withdraw' => 'Apps\CM_ElMoney\Controller\Admin\Withdraw',
+    ])->addComponentNames('block', [
+        'elmoney.admincp.withdraw' => '\Apps\CM_ElMoney\Block\Admin\Withdraw',
     ])->addComponentNames('ajax', [
         'elmoney.ajax'        => '\Apps\CM_ElMoney\Ajax\Ajax',
     ])
@@ -33,6 +37,7 @@ group('/admincp/elmoney/', function(){
     route('gateway/settings', 'elmoney.admincp.gateway.settings');
     route('settings', 'elmoney.admincp.settings');
     route('funds/manage', 'elmoney.admincp.funds.manage');
+    route('withdraw', 'elmoney.admincp.withdraw');
 });
 
 defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getService('elmoney')->isActive());
@@ -43,6 +48,8 @@ if(CM_EL_MONEY_IS_ACTIVE) {
         'elmoney.pay' => 'Apps\CM_ElMoney\Controller\Pay',
         'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
         'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
+        'elmoney.withdraw' => 'Apps\CM_ElMoney\Controller\Withdraw',
+        'elmoney.withdraw.history' => 'Apps\CM_ElMoney\Controller\WithdrawHistory',
     ])
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
@@ -60,6 +67,8 @@ group('/elmoney/', function(){
         route('sendtofriend', 'elmoney.sendtofriend');
         route('funds/add', 'elmoney.funds.add');
         route('pay', 'elmoney.pay');
+        route('withdraw', 'elmoney.withdraw');
+        route('withdraw/history', 'elmoney.withdraw.history');
     }
 
 });

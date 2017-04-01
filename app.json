@@ -8,7 +8,8 @@
   "admincp_menu": {
     "Settings": "elmoney.settings",
     "Gateway Settings": "elmoney.gateway.settings",
-    "Manage user balance": "elmoney.funds.manage"
+    "Manage user balance": "elmoney.funds.manage",
+    "Withdraw": "elmoney.withdraw"
   },
   "admincp_route": "/admincp/elmoney/funds/manage",
   "component" : {

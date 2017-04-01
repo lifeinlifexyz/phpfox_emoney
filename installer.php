@@ -35,22 +35,19 @@ $oInstaller->onInstall(function() use ($oInstaller){
       KEY `Item_number` (`item_number`,`buyer_id`,`seller_id`)
     )');
 
-    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_payments') . '` (
-      `payment_id` bigint(30) NOT NULL AUTO_INCREMENT,
-      `seller_id` int(11) NOT NULL,
+    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_withdraw') . '` (
+      `withdraw_id` int(11) NOT NULL AUTO_INCREMENT,
+      `gateway` varchar(100) NOT NULL,
+      `amount` decimal(14,2) NOT NULL,
+      `comment` text NOT NULL,
+      `commission` int(11) NOT NULL,
+      `total` decimal(14,2) NOT NULL,
+      `withdraw` decimal(14,2) NOT NULL,
+      `currency` varchar(5) NOT NULL,
+      `time_stamp` int(12) NOT NULL,
+      `status` varchar(15) NOT NULL,
       `user_id` int(11) NOT NULL,
-      `item_name` varchar(300) NOT NULL,
-      `item_number` varchar(300) NOT NULL,
-      `currency_code` varchar(5) NOT NULL,
-      `return_url` varchar(200) NOT NULL,
-      `amount` int(15) NOT NULL,
-      `time_stamp` int(12) DEFAULT NULL,
-      `status` varchar(15) NOT NULL DEFAULT \'pending\',
-      `comment` varchar(300) NULL DEFAULT \'\',
-      `is_add_funds` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
-      PRIMARY KEY (`payment_id`),
-      KEY `seller_id` (`seller_id`,`user_id`),
-      KEY `status` (`status`)
+      PRIMARY KEY (`withdraw_id`)
     )');
 
 

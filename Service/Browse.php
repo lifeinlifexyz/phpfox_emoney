@@ -34,4 +34,11 @@ class Browse extends \Phpfox_Service
         return $this;
     }
 
+    public function getQueryJoins()
+    {
+
+    }
+
+    public function query(){}
+
 }
