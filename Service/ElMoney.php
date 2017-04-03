@@ -7,6 +7,11 @@ use Phpfox_Service;
 class ElMoney extends Phpfox_Service
 {
 
+    const COMMISSION_ADD_FUNDS = 'add_funds';
+    const COMMISSION_SALE = 'sale';
+    const COMMISSION_SEND_TO_FRIEND = 'send_to_friend';
+    const COMMISSION_WITHDRAW = 'withdraw';
+
     private $aCommissions = [];
     /**
      * @var Settings

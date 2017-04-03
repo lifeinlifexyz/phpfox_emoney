@@ -2,6 +2,7 @@
 
 namespace Apps\CM_ElMoney\Controller;
 
+use Apps\CM_ElMoney\Service\ElMoney;
 use Phpfox;
 use Phpfox_Plugin;
 
@@ -21,16 +22,22 @@ class Pay extends \Phpfox_Component
             'return' => _p('Return url is required'),
             'amount' => _p('Amount is required'),
         ];
+        if (($aVals =  Phpfox::getService('elmoney.trunsaction')->get($this->request()->getInt('id'))) && $aVals['buyer_id'] == Phpfox::getUserId()) {
+            $aVals['elmoney_seller_id'] = $aVals['seller_id'];
+            $aVals['currency_code'] = $aVals['currency'];
+            unset($aVals['seller_id']);
+        } else {
+            $aVals  =  [
+                'elmoney_seller_id' => $this->request()->getInt('elmoney_seller_id'),
+                'buyer_id' => $this->request()->getInt('buyer_id'),
+                'item_name' => $this->request()->get('item_name'),
+                'item_number' => $this->request()->get('item_number'),
+                'currency_code' => $this->request()->get('currency_code'),
+                'return' => $this->request()->get('return'),
+                'amount' => $this->request()->get('amount'),
+            ];
+        }
 
-        $aVals  =  [
-            'elmoney_seller_id' => $this->request()->getInt('elmoney_seller_id'),
-            'buyer_id' => $this->request()->getInt('buyer_id'),
-            'item_name' => $this->request()->get('item_name'),
-            'item_number' => $this->request()->get('item_number'),
-            'currency_code' => $this->request()->get('currency_code'),
-            'return' => $this->request()->get('return'),
-            'amount' => $this->request()->get('amount'),
-        ];
 
         if (isset($_POST['comment'])) {
             /**
@@ -87,6 +94,10 @@ class Pay extends \Phpfox_Component
 
             }
         } else {
+            $aVals['commission'] = Phpfox::getService('elmoney')->getCommission($aVals['amount'], ElMoney::COMMISSION_SALE);
+            $aVals['buyer_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['buyer_id']);
+            $aVals['seller_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['elmoney_seller_id']);
+
             $iId = Phpfox::getService('elmoney.trunsaction')->add($aVals);
             Phpfox::getLib('session')->set('elmoney_tr', $iId);
         }

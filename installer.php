@@ -30,6 +30,8 @@ $oInstaller->onInstall(function() use ($oInstaller){
       `seller_balance` decimal(14,2) NOT NULL,
       `time_stamp` int(12) DEFAULT NULL,
       `is_add_funds` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
+      `commission` DECIMAL( 14, 2 ) NOT NULL DEFAULT  \'0\',
+      `return` VARCHAR( 500 ) NULL,
       PRIMARY KEY (`transaction_id`),
       KEY `is_add_funds` (`is_add_funds`),
       KEY `Item_number` (`item_number`,`buyer_id`,`seller_id`)

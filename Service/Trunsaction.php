@@ -22,25 +22,30 @@ class Trunsaction extends Phpfox_Service
 
     public function add($aVal)
     {
-        return $this->database()->insert($this->sTable, [
-            'buyer_id' => (int) $aVal['buyer_id'],
-            'seller_id' => (int) $aVal['elmoney_seller_id'],
-            'status' => isset($aVal['status'])? $aVal['status'] : 'pending',
-            'amount' => $this->oParse->clean($aVal['amount']),
+        $aVals = [
+            '`buyer_id`' => (int) $aVal['buyer_id'],
+            '`seller_id`' => (int) $aVal['elmoney_seller_id'],
+            '`status`' => isset($aVal['status'])? $aVal['status'] : 'pending',
+            '`amount`' => $this->oParse->clean($aVal['amount']),
 
-            'cost' => isset($aVal['cost'])
+            '`cost`' => isset($aVal['cost'])
                 ? $aVal['cost']
                 : Phpfox::getService('elmoney')->convertFrom($aVal['amount'], $aVal['currency_code']),
 
-            'currency' => $this->oParse->clean($aVal['currency_code'], 5),
-            'time_stamp' => PHPFOX_TIME,
-            'item_name' => $this->oParse->clean($aVal['item_name'], 255),
-            'item_number' => isset($aVal['item_number']) ?$this->oParse->clean($aVal['item_number'], 255) : '',
-            'comment' => isset($aVal['comment']) ? $this->oParse->clean($aVal['comment'], 1000) : '',
-            'is_add_funds' => isset($aVal['is_add_funds']) ? (int)$aVal['is_add_funds'] : 0,
-            'buyer_balance' => isset($aVal['buyer_balance']) ? $this->oParse->clean($aVal['buyer_balance']) : 0,
-            'seller_balance' => isset($aVal['buyer_balance']) ? $this->oParse->clean($aVal['seller_balance']) : 0,
-        ]);
+            '`currency`' => $this->oParse->clean($aVal['currency_code'], 5),
+            '`time_stamp`' => PHPFOX_TIME,
+            '`item_name`' => $this->oParse->clean($aVal['item_name'], 255),
+            '`item_number`' => isset($aVal['item_number']) ?$this->oParse->clean($aVal['item_number'], 255) : '',
+            '`comment`' => isset($aVal['comment']) ? $this->oParse->clean($aVal['comment'], 1000) : '',
+            '`is_add_funds`' => isset($aVal['is_add_funds']) ? (int)$aVal['is_add_funds'] : 0,
+            '`buyer_balance`' => isset($aVal['buyer_balance']) ? $this->oParse->clean($aVal['buyer_balance']) : 0,
+            '`seller_balance`' => isset($aVal['buyer_balance']) ? $this->oParse->clean($aVal['seller_balance']) : 0,
+            '`commission`' => isset($aVal['commission']) ? $this->oParse->clean($aVal['commission']) : 0,
+            '`return`' => isset($aVal['return']) ? $this->oParse->clean($aVal['return'], 500) : '',
+        ];
+
+        $iTrId = Phpfox::getLib('session')->get('elmoney_tr');
+        return (!empty($iTrId)) ? $this->update($iTrId, $aVals) : $this->database()->insert($this->sTable, $aVals);
     }
 
     public function update($iTrId, $aVal)

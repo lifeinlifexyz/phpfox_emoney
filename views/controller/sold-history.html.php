@@ -8,8 +8,10 @@ defined('PHPFOX') or exit('NO DICE!');
     <div class="cm-em-table-cell">{_p('Amount')}</div>
     <div class="cm-em-table-cell">{_p('Buyer')}</div>
     <div class="cm-em-table-cell">{_p('Date')}</div>
+    <div class="cm-em-table-cell">{_p('Status')}</div>
     <div class="cm-em-table-cell">{_p('Comment')}</div>
     <div class="cm-em-table-cell">{_p('Balance')}</div>
+    <div class="cm-em-table-cell">{_p('Commission')}</div>
 </div>
 {/if}
 {foreach from=$aItems item=aItem}
@@ -18,8 +20,10 @@ defined('PHPFOX') or exit('NO DICE!');
     <div class="cm-em-table-cell">{$aItem.amount|el_money_currency}</div>
     <div class="cm-em-table-cell">{$aItem|user:'':'':50}</div>
     <div class="cm-em-table-cell">{$aItem.time_stamp|convert_time}</div>
+    <div class="cm-em-table-cell">{$aItem.status}</div>
     <div class="cm-em-table-cell">{$aItem.comment}</div>
     <div class="cm-em-table-cell">{$aItem.seller_balance|el_money_currency}</div>
+    <div class="cm-em-table-cell">{$aItem.commission|el_money_currency}</div>
 </div>
 {/foreach}
 {pager}
