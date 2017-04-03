@@ -11,6 +11,10 @@ class WithdrawHistory extends \Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
+        $oSettings =  Phpfox::getService('elmoney.settings');
+        if (!$oSettings['withdraw']) {
+            $this->url()->send('profile.elmoney');
+        }
 
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
         \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', Phpfox::getService('elmoney')->getSectionMenu());

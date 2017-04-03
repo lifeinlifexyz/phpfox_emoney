@@ -27,6 +27,7 @@ class Settings extends \Phpfox_Component
                 'send_to_friend' => [''],
                 'withdraw' => [''],
             ] : json_decode($oSetting['commissions'], true),
+            'withdraw' => $oSetting['withdraw'],
         ];
 
         $aCurrencies = Phpfox::getService('core.currency')->get();

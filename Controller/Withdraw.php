@@ -11,6 +11,11 @@ class Withdraw extends \Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
+        $oSettings =  Phpfox::getService('elmoney.settings');
+
+        if (!$oSettings['withdraw']) {
+            $this->url()->send('profile.elmoney');
+        }
 
         $aUserGateways = Phpfox::getService('api.gateway')->getUserGateways(Phpfox::getUserId());
         $aActiveGateways = Phpfox::getService('api.gateway')->getActive();
@@ -42,7 +47,6 @@ class Withdraw extends \Phpfox_Component
         ];
         $aVals  =  $this->request()->getArray('val');
 
-        $oSettings =  Phpfox::getService('elmoney.settings');
         $sUserCurrency = Phpfox::getService('user')->getCurrency();
 
         if ($_POST) {

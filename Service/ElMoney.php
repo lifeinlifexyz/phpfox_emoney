@@ -181,8 +181,10 @@ class ElMoney extends Phpfox_Service
             $aMenu[_p('Send to a friend')] = 'elmoney.sendtofriend';
         }
 
-        $aMenu[_p('Withdraw')] = 'elmoney.withdraw';
-        $aMenu[_p('Withdraw History')] = 'elmoney.withdraw.history';
+        if ($this->oSetting['withdraw']) {
+            $aMenu[_p('Withdraw')] = 'elmoney.withdraw';
+            $aMenu[_p('Withdraw History')] = 'elmoney.withdraw.history';
+        }
 
         return $aMenu;
 

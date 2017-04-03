@@ -100,6 +100,19 @@ defined('PHPFOX') or exit('NO DICE!');
         <div class="clear"></div>
     </div>
 
+    <div class="table form-group-follow">
+        <div class="table_left">
+            {_p('Withdraw available')}:
+        </div>
+        <div class="table_right">
+            <div class="item_is_active_holder">
+                <span class="js_item_active item_is_active"><input type="radio" name="val[withdraw]" value="1" {value type='radio' id='withdraw' default='1' selected='true'}/> {phrase var='admincp.yes'}</span>
+                <span class="js_item_active item_is_not_active"><input type="radio" name="val[withdraw]" value="0" {value type='radio' id='withdraw' default='0'}/> {phrase var='admincp.no'}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
     <div class="table_clear">
         <input type="submit" value="{_p('Save')}" class="button btn-primary" />
     </div>
