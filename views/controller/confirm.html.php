@@ -17,14 +17,7 @@
         <div class="info_right">{$iLacks}</div>
     </div>
 {else}
-<form action="{url link='elmoney.pay'}" method="post">
-    <input type="hidden" name="elmoney_seller_id" value="{$aForms.elmoney_seller_id}">
-    <input type="hidden" name="buyer_id" value="{$aForms.buyer_id}">
-    <input type="hidden" name="item_name" value="{$aForms.item_name}"> 
-    <input type="hidden" name="item_number" value="{$aForms.item_number}"> 
-    <input type="hidden" name="currency_code" value="{$aForms.currency_code}"> 
-    <input type="hidden" name="return" value="{$aForms.return}"> 
-    <input type="hidden" name="amount" value="{$aForms.amount}">
+<form action="{url link='elmoney.confirm' id=$aForms.transaction_id}" method="post">
     <div class="table form-group">
         <label for="comment" class="table_left">{_p('Comment')}:</label>
         <div class="table_right">

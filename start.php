@@ -45,7 +45,7 @@ defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getS
 if(CM_EL_MONEY_IS_ACTIVE) {
     Phpfox_Module::instance()->addComponentNames('controller', [
         'elmoney.profile' => 'Apps\CM_ElMoney\Controller\Profile',
-        'elmoney.pay' => 'Apps\CM_ElMoney\Controller\Pay',
+        'elmoney.confirm' => 'Apps\CM_ElMoney\Controller\Confirm',
         'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
         'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
         'elmoney.withdraw' => 'Apps\CM_ElMoney\Controller\Withdraw',
@@ -54,6 +54,7 @@ if(CM_EL_MONEY_IS_ACTIVE) {
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
         'elmoney.currency' => 'Apps\CM_ElMoney\Block\Currency',
+        'elmoney.enough' => 'Apps\CM_ElMoney\Block\Enough',
     ]);
 }
 
@@ -67,7 +68,7 @@ group('/elmoney/', function(){
         route('profile.purchase', 'elmoney.profile');
         route('sendtofriend', 'elmoney.sendtofriend');
         route('funds/add', 'elmoney.funds.add');
-        route('pay', 'elmoney.pay');
+        route('confirm', 'elmoney.confirm');
         route('withdraw', 'elmoney.withdraw');
         route('withdraw/history', 'elmoney.withdraw.history');
     }

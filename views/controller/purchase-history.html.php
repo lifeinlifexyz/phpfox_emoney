@@ -22,7 +22,7 @@ defined('PHPFOX') or exit('NO DICE!');
     <div class="cm-em-table-cell">
         {$aItem.status}
         {if $aItem.status != 'completed'}<br>
-        <a href="{url link='elmoney.pay' id=$aItem.transaction_id}">{_p('Pay now')}</a>
+        <a href="{url link='elmoney.confirm' id=$aItem.transaction_id}">{_p('Pay now')}</a>
         {/if}
     </div>
     <div class="cm-em-table-cell">{$aItem.comment}</div>
