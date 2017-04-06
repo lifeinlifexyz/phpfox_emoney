@@ -9,6 +9,7 @@
         'elmoney.trunsaction' => 'Apps\CM_ElMoney\Service\Trunsaction',
         'elmoney.browse' => 'Apps\CM_ElMoney\Service\Browse',
         'elmoney.withdraw' => 'Apps\CM_ElMoney\Service\Withdraw',
+        'elmoney.aff' => 'Apps\CM_ElMoney\Service\Affiliate',
     ])
     ->addComponentNames('controller', [
         'elmoney.admincp.gateway.settings' => 'Apps\CM_ElMoney\Controller\Admin\Gateway\Settings',

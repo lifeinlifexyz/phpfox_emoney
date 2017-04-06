@@ -20,6 +20,16 @@ class Settings extends \Phpfox_Component
          */
         $oSetting = Phpfox::getService('elmoney.settings');
         $sCommission = $oSetting['commissions'];
+        $sAffiliate = $oSetting['affiliate'];
+        $aAffiliate = [];
+
+        if (Phpfox::isModule('subscribe')) {
+            $aAffiliate['subscribe'] = [
+                'title' => _p('Subscription affiliate'),
+                'percent' => 0,
+            ];
+        }
+
         $aForms = [
             'currency_code' => $oSetting['currency_code'],
             'commissions' => empty($sCommission) ? [
@@ -29,6 +39,9 @@ class Settings extends \Phpfox_Component
                 'sale' => [''],
             ] : json_decode($oSetting['commissions'], true),
             'withdraw' => $oSetting['withdraw'],
+            'affiliate' => empty($sAffiliate)
+                ? $aAffiliate
+                : json_decode($oSetting['affiliate'], true),
         ];
 
         $aCurrencies = Phpfox::getService('core.currency')->get();
@@ -45,14 +58,15 @@ class Settings extends \Phpfox_Component
             $aCurrencies[$sCurrencyId] = $aCurrency;
         }
 
+        (($sPlugin = Phpfox_Plugin::get('elmoney.setting_form_set')) ? eval($sPlugin) : false);
+
         $oValidator = \Phpfox_Validator::instance();
         $oValidator->set([
             'sFormName' => 'js_elmoney_setting',
             'aParams' => $aValidate,
         ]);
 
-        if (($aVals = $this->request()->getArray('val')))
-        {
+        if (($aVals = $this->request()->getArray('val'))) {
             $aNewCommissions = $aVals['commissions']['add_funds'];
             foreach($aNewCommissions as $sCommission) {
                 if (!preg_match('/^\d{1,}:\d{1,}\|\d{1,}$/', $sCommission)) {
@@ -82,9 +96,13 @@ class Settings extends \Phpfox_Component
             }
 
             $aForms = $aVals;
+            (($sPlugin = Phpfox_Plugin::get('elmoney.before_validate_save')) ? eval($sPlugin) : false);
             if ($oValidator->isValid($aVals)) {
                 $aVals['commissions'] = json_encode($aVals['commissions']);
+                $aVals['affiliate'] = json_encode($aVals['affiliate']);
+                (($sPlugin = Phpfox_Plugin::get('elmoney.before_settings_save')) ? eval($sPlugin) : false);
                 Phpfox::getService('elmoney.settings')->save($aVals);
+                (($sPlugin = Phpfox_Plugin::get('elmoney.after_settings_save')) ? eval($sPlugin) : false);
                 $this->url()->send('admincp.app',
                     [
                         'id' => 'CM_ElMoney',

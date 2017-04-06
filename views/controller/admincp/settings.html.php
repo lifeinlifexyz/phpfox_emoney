@@ -136,6 +136,19 @@ defined('PHPFOX') or exit('NO DICE!');
         <div class="clear"></div>
     </div>
 
+    {foreach from=$aForms.affiliate key=sType item=aItem}
+        <div class="table form-group">
+            <input type="hidden" name="val[affiliate][{$sType}][title]" value="{$aItem.title}">
+            <div class="table_left">
+                {$aItem.title}({_p('Percent')}):
+            </div>
+            <div class="table_right">
+                <input type="text" value="{$aItem.percent}" class="form-control" name="val[affiliate][{$sType}][percent]" />
+            </div>
+            <div class="clear"></div>
+        </div>
+    {/foreach}
+
     <div class="table_clear">
         <input type="submit" value="{_p('Save')}" class="button btn-primary" />
     </div>

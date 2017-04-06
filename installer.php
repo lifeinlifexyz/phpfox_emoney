@@ -52,6 +52,17 @@ $oInstaller->onInstall(function() use ($oInstaller){
       PRIMARY KEY (`withdraw_id`)
     )');
 
+    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_user_affilate_codes') . '` (
+      `code_id` int(11) NOT NULL AUTO_INCREMENT,
+      `user_id` int(11) NOT NULL,
+      `type` varchar(50) NOT NULL,
+      `item_id` int(11) NOT NULL DEFAULT \'0\',
+      `code` varchar(30) NOT NULL,
+      PRIMARY KEY (`code_id`),
+      UNIQUE KEY `code` (`code`),
+      KEY `user_id` (`user_id`,`type`)
+    ) ');
+
 
     if (!$oInstaller->db->select('count(*)')->from(Phpfox::getT('api_gateway'))->where('gateway_id = \'elmoney\'')->count()) {
         $oInstaller->db->insert(Phpfox::getT('api_gateway'), [
