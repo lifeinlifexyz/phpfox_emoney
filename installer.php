@@ -65,6 +65,19 @@ $oInstaller->onInstall(function() use ($oInstaller){
       KEY `user_id` (`user_id`,`type`)
     ) ');
 
+    $oInstaller->db->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('elmoney_affiliate') . '` (
+      `affiliate_id` int(11) NOT NULL AUTO_INCREMENT,
+      `code_id` int(11) NOT NULL,
+      `user_id` int(11) NOT NULL,
+      `owner_id` int(11) NOT NULL,
+      `amount` decimal(14,2) NOT NULL,
+      `transaction_id` int(11) NOT NULL,
+      `seller_id` int(11) NOT NULL,
+      `time_stamp` INT( 12 ) NULL,
+      PRIMARY KEY (`affiliate_id`),
+      KEY `code_id` (`code_id`,`user_id`,`owner_id`,`transaction_id`,`seller_id`)
+    ) ');
+
 
     if (!$oInstaller->db->select('count(*)')->from(Phpfox::getT('api_gateway'))->where('gateway_id = \'elmoney\'')->count()) {
         $oInstaller->db->insert(Phpfox::getT('api_gateway'), [

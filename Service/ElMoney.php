@@ -171,7 +171,7 @@ class ElMoney extends Phpfox_Service
 
     public function currency($iAmount)
     {
-        return $iAmount . ' ' . $this->oSetting['currency_code'];
+        return (empty($iAmount) ? 0 : $iAmount) . ' ' . $this->oSetting['currency_code'];
     }
 
     public function getSectionMenu()
@@ -192,6 +192,7 @@ class ElMoney extends Phpfox_Service
         }
 
         $aMenu[_p('Affiliate links')] = 'elmoney.affiliate.links';
+        $aMenu[_p('Affiliate statistics')] = 'elmoney.affiliate.statistics';
 
         return $aMenu;
 

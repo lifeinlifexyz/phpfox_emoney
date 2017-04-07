@@ -15,9 +15,10 @@ class Browse extends \Phpfox_Service
     public function get($sUserField)
     {
         $iPage =  $this->oSearch->getPage();
-        return $this->database()->select(Phpfox::getUserField() . ', `tr`.*')
+        return $this->database()->select(Phpfox::getUserField() . ', `af`.`amount` as `affiliate_amount`, `tr`.*')
                 ->from(Phpfox::getT($this->_sTable), 'tr')
                 ->join(Phpfox::getT('user'), 'u', 'u.user_id = ' . $sUserField)
+                ->leftJoin(Phpfox::getT('elmoney_affiliate'), 'af', '`af`.`transaction_id` = `tr`.`transaction_id`')
                 ->where($this->oSearch->getConditions())
                 ->order($this->oSearch->getSort())
                 ->limit($iPage, $this->oSearch->getDisplay(), null, false, false)

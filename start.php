@@ -52,6 +52,7 @@ if(CM_EL_MONEY_IS_ACTIVE) {
         'elmoney.withdraw' => 'Apps\CM_ElMoney\Controller\Withdraw',
         'elmoney.withdraw.history' => 'Apps\CM_ElMoney\Controller\WithdrawHistory',
         'elmoney.affiliate.links' => 'Apps\CM_ElMoney\Controller\Affiliate\Links',
+        'elmoney.affiliate.statistics' => 'Apps\CM_ElMoney\Controller\Affiliate\Statistics',
     ])
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
@@ -74,6 +75,7 @@ group('/elmoney/', function(){
         route('withdraw', 'elmoney.withdraw');
         route('withdraw/history', 'elmoney.withdraw.history');
         route('affiliate/links', 'elmoney.affiliate.links');
+        route('affiliate/statistics', 'elmoney.affiliate.statistics');
     }
 
 });
