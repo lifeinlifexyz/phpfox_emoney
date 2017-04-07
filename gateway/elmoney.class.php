@@ -48,8 +48,8 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 	public function getEditForm()
 	{
 		return [
-			'seller_id' => [
-				'phrase' => _p('Do enable Cach Payment for you?'),
+			'elmoney_seller_id' => [
+				'phrase' => _p('Do enable EL Money for you?'),
 				'phrase_info' => _p('Any symbol for enable, empty for disable'),
 				'value' => Phpfox::getUserId()
 			]
@@ -64,22 +64,23 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 	 */
 	public function getForm()
 	{
-		if (isset($this->_aParam['setting']['seller_id']) && $this->_aParam['setting']['seller_id']) {
-			$aForm = array(
-				'url' => Phpfox_Url::instance()->makeUrl('cashpayment.buy'),
-				'param' => array(
-					'seller_id' => $this->_aParam['setting']['seller_id'],
+		if (isset($this->_aParam['setting']['elmoney_seller_id']) && $this->_aParam['setting']['elmoney_seller_id']) {
+			$aForm = [
+				'url' => Phpfox_Url::instance()->makeUrl('elmoney.pay'),
+				'param' => [
+					'elmoney_seller_id' => $this->_aParam['setting']['elmoney_seller_id'],
 					'buyer_id' => Phpfox::getUserId(),
 					'item_name' => $this->_aParam['item_name'],
 					'item_number' => $this->_aParam['item_number'],
 					'currency_code' => $this->_aParam['currency_code'],
 					'return' => $this->_aParam['return'],
-				)
-			);
-			$aForm['param']['amount'] = $this->_aParam['amount'];
+				]
+			];
+			//convert to el money
+			$aForm['param']['amount'] = Phpfox::getService('elmoney')->convertTo($this->_aParam['amount'], $this->_aParam['currency_code']);
 			return $aForm;
 		} else {
-			return [];
+			return false;
 		}
 	}
 
@@ -91,12 +92,11 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 	 */
 	public function callback()
 	{
-		Phpfox::log('Starting CashPayment callback');
+		Phpfox::log('Starting EL Money callback');
 
 		Phpfox::log('Attempting callback');
 
 		Phpfox::log('Callback OK');
-
 		$isApp = false;
 		$aParts = explode('|', $this->_aParam['item_number']);
 		if (substr($aParts[0], 0, 5) == '@App/') {
@@ -113,30 +113,80 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 			if ($isApp || (Phpfox::isModule($aParts[0]) && Phpfox::hasCallback($aParts[0], 'paymentApiCallback')))
 			{
 				Phpfox::log('Module callback is valid.');
-				Phpfox::log('Building payment status: ' . (isset($this->_aParam['payment_status']) ? $this->_aParam['payment_status'] : '') . ' (' . (isset($this->_aParam['txn_type']) ? $this->_aParam['txn_type'] : '') . ')');
-
-				$sStatus = $this->_aParam['status'];
+				$iAmount = Phpfox::getService('elmoney')->convertFrom($this->_aParam['amount'], $this->_aParam['currency_code']);
+				$sStatus = 'completed';
 
 				Phpfox::log('Status built: ' . $sStatus);
 
 				Phpfox::log('Executing module callback');
 
 				$params = array(
-					'gateway' => 'cashpayment',
+					'gateway' => 'EL Money',
 					'ref' => $this->_aParam['item_number'],
 					'status' => $sStatus,
 					'item_number' => $aParts[1],
-					'total_paid' => $this->_aParam['amount'],
+					'total_paid' => $iAmount,
 				);
 
 				if ($isApp) {
 					$callback = str_replace('@App/', '', $aParts[0]);
 					Phpfox::log('Running app callback on: ' . $callback);
 					\Core\Payment\Trigger::event($callback, $params);
-				}
-				else {
+				} else {
 					Phpfox::callback($aParts[0] . '.paymentApiCallback', $params);
 				}
+
+				Phpfox::log('Reduce balance from buyer: ' . var_export([
+						'buyer' => $this->_aParam['buyer_id'],
+						'amount' =>  $this->_aParam['amount'],
+					], true));
+
+				$iBuyerBalance = Phpfox::getService('elmoney')->reduceBalance($this->_aParam['buyer_id'], $this->_aParam['amount']);
+
+				Phpfox::log('Add balance to seller: ' . var_export([
+						'buyer' => $this->_aParam['elmoney_seller_id'],
+						'amount' =>  $this->_aParam['amount'],
+					], true));
+
+				$this->_aParam['amount'] = $this->_aParam['amount'] - Phpfox::getService('elmoney')
+						->getCommission($this->_aParam['amount'], \Apps\CM_ElMoney\Service\ElMoney::COMMISSION_SALE);
+
+				$sAffiliateCode = Phpfox::getLib('session')->get('elmoney_affiliate_code');
+
+				if (!empty($sAffiliateCode)) {
+
+					Phpfox::log('Affiliate code exits');
+					$aAffiliate  = Phpfox::getService('elmoney.affiliate')->getAffiliateByCode($sAffiliateCode);
+					if (!empty($aAffiliate)) {
+						Phpfox::log('Affiliate: ' . var_export($aAffiliate, true));
+						$iAffiliateAmount = $this->_aParam['amount'] * ($aAffiliate['percent'] / 100);
+						$this->_aParam['amount'] = $this->_aParam['amount'] - $iAffiliateAmount;
+						Phpfox::getService('elmoney.affiliate')->add([
+							'code_id' => $aAffiliate['code_id'],
+							'user_id' => $this->_aParam['buyer_id'],
+							'owner_id' => $aAffiliate['user_id'],
+							'amount' => $iAffiliateAmount,
+							'transaction_id' => $this->_aParam['tr_id'],
+							'seller_id' => $this->_aParam['elmoney_seller_id'],
+						]);
+						Phpfox::getService('elmoney')->addBalanceToUser($aAffiliate['user_id'], $iAffiliateAmount);
+					} else {
+						Phpfox::log('Affiliate not found');
+					}
+					Phpfox::getLib('session')->remove('elmoney_affiliate_code');
+				}
+
+				$iSellerBalance = Phpfox::getService('elmoney')->addBalanceToUser($this->_aParam['elmoney_seller_id'], $this->_aParam['amount']);
+				$aTransactionVals =  [
+					'status' => 'completed',
+					'buyer_balance' =>  $iBuyerBalance,
+					'seller_balance' =>  $iSellerBalance,
+					'time_stamp' => PHPFOX_TIME,
+				];
+				if (isset($iAffiliateAmount)) {
+
+				}
+				Phpfox::getService('elmoney.trunsaction')->update($this->_aParam['tr_id'], $aTransactionVals);
 			}
 			else
 			{
