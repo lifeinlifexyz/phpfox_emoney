@@ -16,7 +16,12 @@ class Affiliate extends \Phpfox_Service
         $this->oParser = \Phpfox_Parse_Input::instance();
     }
 
-    public function getUserCode($sType, $iItemId, $iUserId = null)
+    public function getUserCodes($iUserId)
+    {
+        return $this->database()->select('*')->from($this->sUserCodeTable)->where('user_id = ' . (int) $iUserId)->all();
+    }
+
+    public function getUserCode($sType, $iItemId, $sTitle = '', $sUrl = '', $fPercent = 0.00, $iUserId = null)
     {
         if (is_null($iUserId)) {
             $iUserId = \Phpfox::getUserId();
@@ -37,9 +42,12 @@ class Affiliate extends \Phpfox_Service
 
         $aVal = [
             '`type`' => $this->oParser->clean($sType, 50),
+            '`title`' => $this->oParser->clean($sTitle, 500),
+            '`url`' => $this->oParser->clean($sUrl, 255),
             '`item_id`' => (int) $iUserId,
             '`user_id`' => $iUserId,
             '`code`' => $this->generateCode(),
+            '`percent`' => $fPercent,
         ];
 
         $this->database()->insert($this->sUserCodeTable, $aVal);
@@ -56,6 +64,13 @@ class Affiliate extends \Phpfox_Service
             }
         }
         return false;
+    }
+
+    public function getAllowedModules()
+    {
+        return [
+            'subscribe',
+        ];
     }
 
     protected function generateCode()

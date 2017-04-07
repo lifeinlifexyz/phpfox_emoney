@@ -191,6 +191,8 @@ class ElMoney extends Phpfox_Service
             $aMenu[_p('Withdraw History')] = 'elmoney.withdraw.history';
         }
 
+        $aMenu[_p('Affiliate links')] = 'elmoney.affiliate.links';
+
         return $aMenu;
 
     }

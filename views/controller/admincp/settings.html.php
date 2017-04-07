@@ -142,9 +142,11 @@ defined('PHPFOX') or exit('NO DICE!');
             <div class="table_left">
                 {$aItem.title}({_p('Percent')}):
             </div>
+            {foreach from=$aItem.percent key=iItemId item=iPercent}
             <div class="table_right">
-                <input type="text" value="{$aItem.percent}" class="form-control" name="val[affiliate][{$sType}][percent]" />
+                <input type="text" value="{$iPercent}" class="form-control" name="val[affiliate][{$sType}][percent][{$iItemId}]" />
             </div>
+            {/foreach}
             <div class="clear"></div>
         </div>
     {/foreach}

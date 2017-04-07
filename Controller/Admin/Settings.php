@@ -26,17 +26,17 @@ class Settings extends \Phpfox_Component
         if (Phpfox::isModule('subscribe')) {
             $aAffiliate['subscribe'] = [
                 'title' => _p('Subscription affiliate'),
-                'percent' => 0,
+                'percent' => [1 => 0],
             ];
         }
 
         $aForms = [
-            'currency_code' => $oSetting['currency_code'],
+            'currency_code' => $oSetting['currency_code'] ?: 'el',
             'commissions' => empty($sCommission) ? [
-                'add_funds' => [''],
-                'send_to_friend' => [''],
-                'withdraw' => [''],
-                'sale' => [''],
+                'add_funds' => ['1:9000|1'],
+                'send_to_friend' => ['1:9000|1'],
+                'withdraw' => ['1:9000|1'],
+                'sale' => ['1:9000|1'],
             ] : json_decode($oSetting['commissions'], true),
             'withdraw' => $oSetting['withdraw'],
             'affiliate' => empty($sAffiliate)

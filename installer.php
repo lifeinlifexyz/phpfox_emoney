@@ -58,6 +58,8 @@ $oInstaller->onInstall(function() use ($oInstaller){
       `type` varchar(50) NOT NULL,
       `item_id` int(11) NOT NULL DEFAULT \'0\',
       `code` varchar(30) NOT NULL,
+      `title` VARCHAR( 500 ) NOT NULL ,
+      `url` VARCHAR( 255 ) NOT NULL
       PRIMARY KEY (`code_id`),
       UNIQUE KEY `code` (`code`),
       KEY `user_id` (`user_id`,`type`)

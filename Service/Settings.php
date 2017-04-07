@@ -42,6 +42,13 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
         return $this;
     }
 
+    public function getAffiliatePercent($sType, $iItemId)
+    {
+        $sAffiliates = $this->get('affiliate');
+        $aAffiliate = json_decode($sAffiliates, true);
+        return isset($aAffiliate[$sType]['percent'][$iItemId]) ? $aAffiliate[$sType]['percent'][$iItemId] : 0;
+    }
+
     public function get($sName)
     {
         if (empty(self::$aSettings)) {

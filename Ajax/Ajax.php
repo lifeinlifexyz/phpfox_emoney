@@ -8,6 +8,12 @@ use Phpfox_Ajax;
 class Ajax extends Phpfox_Ajax
 {
 
+    public function addFundsForm()
+    {
+        Phpfox::isUser(true);
+        return Phpfox::getComponent('elmoney.funds.add', [], 'controller');
+    }
+
     public function addFunds()
     {
         Phpfox::isUser(true);
@@ -74,6 +80,7 @@ class Ajax extends Phpfox_Ajax
         $this->call('$("#gateways .gateways").html("' . $sContent . '");');
         $this->call('$("#gateways").data("id",' . $iTrId . ');');
         $this->call('$("#gateways").show();');
+        $this->call('$("form[action$=\'/cashpayment/buy/\']").attr("onsubmit", "$(this).ajaxCall(\'cashpayment.buy\'); return false;");');
     }
 
     public function cancelAddFund()
@@ -162,6 +169,7 @@ class Ajax extends Phpfox_Ajax
                         'iLacks' => Phpfox::getService('elmoney')->currency($iAmount - $iUserBalance),
                     ]);
                     $this->html('form[action$="/elmoney/pay/"]', $this->getContent(false));
+                    $this->call('$Core.loadInit();');
                     return false;
                 }
 

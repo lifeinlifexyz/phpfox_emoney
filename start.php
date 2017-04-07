@@ -9,7 +9,7 @@
         'elmoney.trunsaction' => 'Apps\CM_ElMoney\Service\Trunsaction',
         'elmoney.browse' => 'Apps\CM_ElMoney\Service\Browse',
         'elmoney.withdraw' => 'Apps\CM_ElMoney\Service\Withdraw',
-        'elmoney.aff' => 'Apps\CM_ElMoney\Service\Affiliate',
+        'elmoney.affiliate' => 'Apps\CM_ElMoney\Service\Affiliate',
     ])
     ->addComponentNames('controller', [
         'elmoney.admincp.gateway.settings' => 'Apps\CM_ElMoney\Controller\Admin\Gateway\Settings',
@@ -51,6 +51,7 @@ if(CM_EL_MONEY_IS_ACTIVE) {
         'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
         'elmoney.withdraw' => 'Apps\CM_ElMoney\Controller\Withdraw',
         'elmoney.withdraw.history' => 'Apps\CM_ElMoney\Controller\WithdrawHistory',
+        'elmoney.affiliate.links' => 'Apps\CM_ElMoney\Controller\Affiliate\Links',
     ])
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
@@ -72,6 +73,7 @@ group('/elmoney/', function(){
         route('confirm', 'elmoney.confirm');
         route('withdraw', 'elmoney.withdraw');
         route('withdraw/history', 'elmoney.withdraw.history');
+        route('affiliate/links', 'elmoney.affiliate.links');
     }
 
 });

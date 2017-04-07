@@ -28,5 +28,5 @@ defined('PHPFOX') or exit('NO DICE!');
 </div>
 
 <div>
-    <a href='{url link="elmoney.funds.add"}'>{_p('+ Add funds')}</a>
+    <a href='#?call=elmoney.addFundsForm' class='inlinePopup'>{_p('+ Add funds')}</a>
 </div>
