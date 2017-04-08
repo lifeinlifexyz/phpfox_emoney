@@ -66,7 +66,6 @@ class Confirm extends \Phpfox_Component
                     'status' => 'confirmed',
                 ]);
 
-            $aVals['elmoney_seller_id'] = $aVals['seller_id'];
             $aVals['currency_code'] = $aVals['currency'];
             $aVals['tr_id'] = $iTrId;
 

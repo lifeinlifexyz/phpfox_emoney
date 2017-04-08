@@ -24,7 +24,7 @@ class Trunsaction extends Phpfox_Service
     {
         $aVals = [
             '`buyer_id`' => (int) $aVal['buyer_id'],
-            '`seller_id`' => (int) $aVal['elmoney_seller_id'],
+            '`seller_id`' => (int) $aVal['seller_id'],
             '`status`' => isset($aVal['status'])? $aVal['status'] : 'pending',
             '`amount`' => $this->oParse->clean($aVal['amount']),
 

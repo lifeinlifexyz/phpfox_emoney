@@ -28,7 +28,7 @@ class Ajax extends Phpfox_Ajax
         $iTrId = Phpfox::getService('elmoney.trunsaction')->add([
             'is_add_funds' => true,
             'buyer_id' => Phpfox::getUserId(),
-            'elmoney_seller_id' => 0,
+            'seller_id' => 0,
             'amount' => $iBalance,
             'cost' => $iPrice,
             'item_name' => $sItemName,
@@ -122,7 +122,7 @@ class Ajax extends Phpfox_Ajax
         Phpfox::isUser(true);
 
         $aValidation =  [
-            'elmoney_seller_id' => _p('Seller Id is required'),
+            'seller_id' => _p('Seller Id is required'),
             'buyer_id' => _p('Buyer Id is required'),
             'item_name' => _p('Item name is required'),
             'item_number' => _p('Item number is required'),
@@ -132,7 +132,7 @@ class Ajax extends Phpfox_Ajax
         ];
 
         $aVals  =  [
-            'elmoney_seller_id' => (int)$this->get('elmoney_seller_id'),
+            'seller_id' => (int)$this->get('seller_id'),
             'buyer_id' => (int)$this->get('buyer_id'),
             'item_name' => $this->get('item_name'),
             'item_number' => $this->get('item_number'),
@@ -167,7 +167,7 @@ class Ajax extends Phpfox_Ajax
             $this->call('$(\'form[action$="/elmoney/pay/"]\').siblings().remove();');
 
             $sContent = '<div class="table form-group">
-                            <input type="hidden" name="elmoney_seller_id" value="' . $aVals['elmoney_seller_id'] . '">
+                            <input type="hidden" name="seller_id" value="' . $aVals['seller_id'] . '">
                             <input type="hidden" name="buyer_id" value="' . $aVals['buyer_id'] . '">
                             <input type="hidden" name="item_name" value="' . $aVals['item_name'] . '">
                             <input type="hidden" name="item_number" value="' . $aVals['item_number'] . '">
@@ -200,7 +200,7 @@ class Ajax extends Phpfox_Ajax
             if ($oValidator->isValid($aVals)){
                 $aVals['commission'] = Phpfox::getService('elmoney')->getCommission($aVals['amount'], ElMoney::COMMISSION_SALE);
                 $aVals['buyer_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['buyer_id']);
-                $aVals['seller_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['elmoney_seller_id']);
+                $aVals['seller_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['seller_id']);
                 $aVals['comment'] =  \Phpfox_Parse_Input::instance()->clean($this->get('comment', 1000));
                 $aVals['status'] =  'confirmed';
                 $iId = Phpfox::getService('elmoney.trunsaction')->add($aVals);

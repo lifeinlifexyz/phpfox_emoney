@@ -48,7 +48,7 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 	public function getEditForm()
 	{
 		return [
-			'elmoney_seller_id' => [
+			'seller_id' => [
 				'phrase' => _p('Do enable EL Money for you?'),
 				'phrase_info' => _p('Any symbol for enable, empty for disable'),
 				'value' => Phpfox::getUserId()
@@ -64,11 +64,11 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 	 */
 	public function getForm()
 	{
-		if (isset($this->_aParam['setting']['elmoney_seller_id']) && $this->_aParam['setting']['elmoney_seller_id']) {
+		if (isset($this->_aParam['setting']['seller_id']) && $this->_aParam['setting']['seller_id']) {
 			$aForm = [
 				'url' => Phpfox_Url::instance()->makeUrl('elmoney.pay'),
 				'param' => [
-					'elmoney_seller_id' => $this->_aParam['setting']['elmoney_seller_id'],
+					'seller_id' => $this->_aParam['setting']['seller_id'],
 					'buyer_id' => Phpfox::getUserId(),
 					'item_name' => $this->_aParam['item_name'],
 					'item_number' => $this->_aParam['item_number'],
@@ -144,7 +144,7 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 				$iBuyerBalance = Phpfox::getService('elmoney')->reduceBalance($this->_aParam['buyer_id'], $this->_aParam['amount']);
 
 				Phpfox::log('Add balance to seller: ' . var_export([
-						'buyer' => $this->_aParam['elmoney_seller_id'],
+						'buyer' => $this->_aParam['seller_id'],
 						'amount' =>  $this->_aParam['amount'],
 					], true));
 
@@ -168,7 +168,7 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 								'owner_id' => $aAffiliate['user_id'],
 								'amount' => $iAffiliateAmount,
 								'transaction_id' => $this->_aParam['tr_id'],
-								'seller_id' => $this->_aParam['elmoney_seller_id'],
+								'seller_id' => $this->_aParam['seller_id'],
 							]);
 							Phpfox::getService('elmoney')->addBalanceToUser($aAffiliate['user_id'], $iAffiliateAmount);
 						}
@@ -178,7 +178,7 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 					Phpfox::getLib('session')->remove('elmoney_affiliate_code');
 				}
 
-				$iSellerBalance = Phpfox::getService('elmoney')->addBalanceToUser($this->_aParam['elmoney_seller_id'], $this->_aParam['amount']);
+				$iSellerBalance = Phpfox::getService('elmoney')->addBalanceToUser($this->_aParam['seller_id'], $this->_aParam['amount']);
 				$aTransactionVals =  [
 					'status' => 'completed',
 					'buyer_balance' =>  $iBuyerBalance,

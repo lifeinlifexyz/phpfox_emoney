@@ -50,7 +50,7 @@ class SendToFriend extends \Phpfox_Component
                         $iUserBalance = Phpfox::getService('elmoney')->reduceBalance(Phpfox::getUserId(), $aVal['amount'] + $iCommission);
                         Phpfox::getService('elmoney.trunsaction')->add([
                             'buyer_id' => Phpfox::getUserId(),
-                            'elmoney_seller_id' => $iFriendId,
+                            'seller_id' => $iFriendId,
                             'status' => 'completed',
                             'amount' => $aVal['amount'],
                             'commission' => $iCommission,
