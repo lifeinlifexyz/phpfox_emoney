@@ -39,3 +39,23 @@
 .elmoney-balance-value {
     max-width: 120px;
 }
+
+
+#cm-filter-admin-block .header_filter_holder .inline-block {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 20px;
+    padding-right: 8px;
+}
+#cm-filter-admin-block a {
+    text-decoration: none !important;
+}
+
+#cm-filter-admin-block .header_filter_holder .btn {
+    background: #dddddd;
+    border-color: #d8d8d8;
+    color: #333333;
+    padding: 11px 10px;
+    font-size: 12px;
+    line-height: 1.3333333;
+}
