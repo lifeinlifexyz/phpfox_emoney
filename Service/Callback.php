@@ -118,8 +118,8 @@ class Callback extends \Phpfox_Service
     public function getBrowseQuery()
     {
         $this->database()
-            ->select('`ub`.`balance` as user_el_balance, ')
-            ->leftJoin(\Phpfox::getT('elmoney_user_balance'), '`ub`', '`u`.`user_id` = `ub`.`user_id`');
+            ->select('`elm_ub`.`balance` as user_el_balance, ')
+            ->leftJoin(\Phpfox::getT('elmoney_user_balance'), '`elm_ub`', '`u`.`user_id` = `elm_ub`.`user_id`');
     }
 
     /**

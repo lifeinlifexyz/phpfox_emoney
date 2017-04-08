@@ -1,5 +1,10 @@
 <?php
 
+if (Phpfox::getVersion() == '4.5.2') {
+    require_once  PHPFOX_DIR_LIB_CORE . 'gateway' . PHPFOX_DS . 'api' . PHPFOX_DS . 'elmoney.class.php';
+    Phpfox::getLibContainer()->set('gateway.api.elmoney', new \Phpfox_Gateway_Api_ElMoney());
+}
+
 \Phpfox_Module::instance()
     ->addServiceNames([
         'elmoney.settings' => 'Apps\CM_ElMoney\Service\Settings',
@@ -43,23 +48,21 @@ group('/admincp/elmoney/', function(){
 
 defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getService('elmoney')->isActive());
 
-if(CM_EL_MONEY_IS_ACTIVE) {
-    Phpfox_Module::instance()->addComponentNames('controller', [
-        'elmoney.profile' => 'Apps\CM_ElMoney\Controller\Profile',
-        'elmoney.confirm' => 'Apps\CM_ElMoney\Controller\Confirm',
-        'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
-        'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
-        'elmoney.withdraw' => 'Apps\CM_ElMoney\Controller\Withdraw',
-        'elmoney.withdraw.history' => 'Apps\CM_ElMoney\Controller\WithdrawHistory',
-        'elmoney.affiliate.links' => 'Apps\CM_ElMoney\Controller\Affiliate\Links',
-        'elmoney.affiliate.statistics' => 'Apps\CM_ElMoney\Controller\Affiliate\Statistics',
-    ])
+Phpfox_Module::instance()->addComponentNames('controller', [
+    'elmoney.profile' => 'Apps\CM_ElMoney\Controller\Profile',
+    'elmoney.confirm' => 'Apps\CM_ElMoney\Controller\Confirm',
+    'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
+    'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
+    'elmoney.withdraw' => 'Apps\CM_ElMoney\Controller\Withdraw',
+    'elmoney.withdraw.history' => 'Apps\CM_ElMoney\Controller\WithdrawHistory',
+    'elmoney.affiliate.links' => 'Apps\CM_ElMoney\Controller\Affiliate\Links',
+    'elmoney.affiliate.statistics' => 'Apps\CM_ElMoney\Controller\Affiliate\Statistics',
+])
     ->addComponentNames('block', [
         'elmoney.balance' => 'Apps\CM_ElMoney\Block\Balance',
         'elmoney.currency' => 'Apps\CM_ElMoney\Block\Currency',
         'elmoney.enough' => 'Apps\CM_ElMoney\Block\Enough',
     ]);
-}
 
 group('/elmoney/', function(){
     route('gateway/setting/save', 'elmoney.admincp.gateway.settings');
