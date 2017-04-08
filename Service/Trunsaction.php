@@ -43,9 +43,7 @@ class Trunsaction extends Phpfox_Service
             '`commission`' => isset($aVal['commission']) ? $this->oParse->clean($aVal['commission']) : 0,
             '`return`' => isset($aVal['return']) ? $this->oParse->clean($aVal['return'], 500) : '',
         ];
-
-        $iTrId = Phpfox::getLib('session')->get('elmoney_tr');
-        return (!empty($iTrId)) ? $this->update($iTrId, $aVals) : $this->database()->insert($this->sTable, $aVals);
+        return $this->database()->insert($this->sTable, $aVals);
     }
 
     public function update($iTrId, $aVal)

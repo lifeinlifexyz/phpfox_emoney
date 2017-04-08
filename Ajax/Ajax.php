@@ -143,6 +143,52 @@ class Ajax extends Phpfox_Ajax
 
 
         if (!isset($_POST['comment'])) {
+
+            if (Phpfox::getUserId() != ($iBuyerId = $aVals['buyer_id'])) {
+                $this->alert(_p('Buyer ID and your Id is not equal'));
+                return false;
+            }
+
+            $iAmount = $aVals['amount'];
+            $iUserBalance = Phpfox::getService('elmoney')->getUserBalance();
+
+            if ($iUserBalance < $iAmount) {
+                Phpfox::getBlock('elmoney.enough', [
+                    'iUserBalance' => Phpfox::getService('elmoney')->currency($iUserBalance),
+                    'iAmount' => Phpfox::getService('elmoney')->currency($iAmount),
+                    'iLacks' => Phpfox::getService('elmoney')->currency($iAmount - $iUserBalance),
+                ]);
+                $this->html('form[action$="/elmoney/pay/"]', $this->getContent(false));
+                $this->call('$Core.loadInit();');
+                return false;
+            }
+
+
+            $this->call('$(\'form[action$="/elmoney/pay/"]\').siblings().remove();');
+
+            $sContent = '<div class="table form-group">
+                            <input type="hidden" name="elmoney_seller_id" value="' . $aVals['elmoney_seller_id'] . '">
+                            <input type="hidden" name="buyer_id" value="' . $aVals['buyer_id'] . '">
+                            <input type="hidden" name="item_name" value="' . $aVals['item_name'] . '">
+                            <input type="hidden" name="item_number" value="' . $aVals['item_number'] . '">
+                            <input type="hidden" name="currency_code" value="' . $aVals['currency_code'] . '">
+                            <input type="hidden" name="return" value="' . $aVals['return'] . '">
+                            <input type="hidden" name="amount" value="' . $aVals['amount'] . '">
+                            <label for="comment" class="table_left">' . _p('Comment') . ':</label>
+                            <div class="table_right">
+                                <textarea name="comment" id="comment" class="form-control"></textarea>
+                            </div>
+                          </div>
+
+                            <div class="table form-group">
+                                <div class="table_right">
+                                    <input type="submit" class="btn btn-primary" value="' . _p('Confirm') . '">
+                                </div>
+                            </div>';
+            $this->html('form[action$="/elmoney/pay/"]', $sContent);
+            return true;
+
+        } else {
             /**
              * @var $oValidator \Phpfox_Validator
              */
@@ -151,86 +197,50 @@ class Ajax extends Phpfox_Ajax
                 'aParams' => $aValidation,
             ]);
 
-            if ($oValidator->isValid($aVals)) {
-                $bIsValid = true;
-
-                if (Phpfox::getUserId() != ($iBuyerId = $aVals['buyer_id'])) {
-                    $this->alert(_p('Buyer ID and your Id is not equal'));
-                    return false;
-                }
-
-                $iAmount = $aVals['amount'];
-                $iUserBalance = Phpfox::getService('elmoney')->getUserBalance();
-
-                if ($iUserBalance < $iAmount) {
-                    Phpfox::getBlock('elmoney.enough', [
-                        'iUserBalance' => Phpfox::getService('elmoney')->currency($iUserBalance),
-                        'iAmount' => Phpfox::getService('elmoney')->currency($iAmount),
-                        'iLacks' => Phpfox::getService('elmoney')->currency($iAmount - $iUserBalance),
-                    ]);
-                    $this->html('form[action$="/elmoney/pay/"]', $this->getContent(false));
-                    $this->call('$Core.loadInit();');
-                    return false;
-                }
-
+            if ($oValidator->isValid($aVals)){
                 $aVals['commission'] = Phpfox::getService('elmoney')->getCommission($aVals['amount'], ElMoney::COMMISSION_SALE);
                 $aVals['buyer_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['buyer_id']);
                 $aVals['seller_balance'] = Phpfox::getService('elmoney')->getUserBalance((int)$aVals['elmoney_seller_id']);
-
+                $aVals['comment'] =  \Phpfox_Parse_Input::instance()->clean($this->get('comment', 1000));
+                $aVals['status'] =  'confirmed';
                 $iId = Phpfox::getService('elmoney.trunsaction')->add($aVals);
-                Phpfox::getLib('session')->set('elmoney_tr', $iId);
-                $this->call('$(\'form[action$="/elmoney/pay/"]\').siblings().remove();');
-
-                $sContent = '<div class="table form-group">
-                                <label for="comment" class="table_left">' . _p('Comment') . ':</label>
-                                <div class="table_right">
-                                    <textarea name="comment" id="comment" class="form-control"></textarea>
-                                </div>
-                              </div>
-
-                                <div class="table form-group">
-                                    <div class="table_right">
-                                        <input type="submit" class="btn btn-primary" value="' . _p('Confirm') . '">
-                                    </div>
-                                </div>';
-
-                $this->html('form[action$="/elmoney/pay/"]', $sContent);
-                return true;
-
-
-
-            } else {
+                if ($iId) {
+                    $aVals['tr_id'] = $iId;
+                    request()->set($aVals);
+                    \Api_Service_Gateway_Gateway::instance()->callback('elmoney');
+                    $this->call('window.location.href="' . $aVals['return'] . '"');
+                    return true;
+                } else {
+                    $this->alert(_p('Undefined error'));
+                    return false;
+                }
+            }  else {
                 $this->alert(implode('\n\t', \Phpfox_Error::get()));
                 return false;
             }
-
-
-        } else {
-            $iTrId = Phpfox::getLib('session')->get('elmoney_tr');
-            if (empty($iTrId)) {
-                $this->alert(_p('The session lifetime has expired'));
-                return false;
-            }
-            $aTransaction = Phpfox::getService('elmoney.trunsaction')->get($iTrId);
-            if ($aTransaction['buyer_id'] != Phpfox::getUserId()) {
-                $this->alert(_p('You are not owner of this transaction!'));
-                return false;
-            }
-
-            Phpfox::getService('elmoney.trunsaction')
-                ->update($iTrId, [
-                    'comment' =>  \Phpfox_Parse_Input::instance()->clean($this->get('comment', 1000)),
-                    'status' => 'confirmed',
-                ]);
-            $aTransaction['tr_id'] = $iTrId;
-            $aTransaction['currency_code'] = $aTransaction['currency'];
-            $aTransaction['elmoney_seller_id'] = $aTransaction['seller_id'];
-            request()->set($aTransaction);
-            \Api_Service_Gateway_Gateway::instance()->callback('elmoney');
-            Phpfox::getLib('session')->remove('elmoney_tr');
-
-            $this->call('window.location.href="' . $aTransaction['return'] . '"');
-            return true;
         }
+    }
+
+    public function affiliateEnable()
+    {
+        $this->isUser();
+        $sTitle = $this->get('title');
+        $sType = $this->get('type');
+        $iItemId = (int)$this->get('item_id');
+        $iPercent = $this->get('percent');
+        Phpfox::getService('elmoney.settings')->saveAffiliatePercent($sTitle, $sType, $iItemId, $iPercent);
+        $this->alert('Successfully saved');
+    }
+
+    public function affiliateLinkSave()
+    {
+        $this->isUser();
+        $sTitle = $this->get('title');
+        $sUrl = $this->get('url');
+        $sType = $this->get('type');
+        $iItemId = (int)$this->get('item_id');
+        $iPercent = Phpfox::getService('elmoney.settings')->getAffiliatePercent($sType, $iItemId);
+        $aAffiliate = Phpfox::getService('elmoney.affiliate')->getUserCode($sType, $iItemId, $sTitle, $sUrl, $iPercent);
+        $this->alert(url()->make($sUrl, ['elmoney_affiliate_code' => $aAffiliate['code']]), _p('Your affiliate link'), 618);
     }
 }

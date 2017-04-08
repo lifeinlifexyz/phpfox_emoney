@@ -22,6 +22,7 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
     {
         $this->cache()->remove($this->sCacheId);
         $this->_save($aVals);
+        $this->cache()->remove($this->sCacheId);
         return $this;
     }
 
@@ -47,6 +48,16 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
         $sAffiliates = $this->get('affiliate');
         $aAffiliate = json_decode($sAffiliates, true);
         return isset($aAffiliate[$sType]['percent'][$iItemId]) ? $aAffiliate[$sType]['percent'][$iItemId] : 0;
+    }
+
+    public function saveAffiliatePercent($sTitle, $sType, $iItemId, $sValue)
+    {
+        $sAffiliates = $this->get('affiliate');
+        $aAffiliate = json_decode($sAffiliates, true);
+        $aAffiliate[$sType]['title'] = $sTitle;
+        $aAffiliate[$sType]['percent'][$iItemId] = $sValue;
+        $this['affiliate'] = json_encode($aAffiliate);
+        return $this;
     }
 
     public function get($sName)
@@ -122,12 +133,7 @@ class Settings extends \Phpfox_Service implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        $this->save([
-            [
-                'name' => $offset,
-                'value' => $value,
-            ]
-        ]);
+        $this->save([$offset => $value]);
     }
 
     /**

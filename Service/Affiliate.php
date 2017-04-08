@@ -58,7 +58,7 @@ class Affiliate extends \Phpfox_Service
             '`amount`' => $aVals['amount'],
             '`transaction_id`' =>  (int) $aVals['transaction_id'],
             '`seller_id`' => (int) $aVals['seller_id'],
-            '`time_stamp' => PHPFOX_TIME,
+            '`time_stamp`' => PHPFOX_TIME,
         ];
 
         $this->database()->insert($this->sTable, $aVal);

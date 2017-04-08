@@ -158,18 +158,20 @@ class Phpfox_Gateway_Api_ElMoney implements Phpfox_Gateway_Interface
 					Phpfox::log('Affiliate code exits');
 					$aAffiliate  = Phpfox::getService('elmoney.affiliate')->getAffiliateByCode($sAffiliateCode);
 					if (!empty($aAffiliate)) {
-						Phpfox::log('Affiliate: ' . var_export($aAffiliate, true));
-						$iAffiliateAmount = $this->_aParam['amount'] * ($aAffiliate['percent'] / 100);
-						$this->_aParam['amount'] = $this->_aParam['amount'] - $iAffiliateAmount;
-						Phpfox::getService('elmoney.affiliate')->add([
-							'code_id' => $aAffiliate['code_id'],
-							'user_id' => $this->_aParam['buyer_id'],
-							'owner_id' => $aAffiliate['user_id'],
-							'amount' => $iAffiliateAmount,
-							'transaction_id' => $this->_aParam['tr_id'],
-							'seller_id' => $this->_aParam['elmoney_seller_id'],
-						]);
-						Phpfox::getService('elmoney')->addBalanceToUser($aAffiliate['user_id'], $iAffiliateAmount);
+						if ($aAffiliate['percent'] > 0) {
+							Phpfox::log('Affiliate: ' . var_export($aAffiliate, true));
+							$iAffiliateAmount = $this->_aParam['amount'] * ($aAffiliate['percent'] / 100);
+							$this->_aParam['amount'] = $this->_aParam['amount'] - $iAffiliateAmount;
+							Phpfox::getService('elmoney.affiliate')->add([
+								'code_id' => $aAffiliate['code_id'],
+								'user_id' => $this->_aParam['buyer_id'],
+								'owner_id' => $aAffiliate['user_id'],
+								'amount' => $iAffiliateAmount,
+								'transaction_id' => $this->_aParam['tr_id'],
+								'seller_id' => $this->_aParam['elmoney_seller_id'],
+							]);
+							Phpfox::getService('elmoney')->addBalanceToUser($aAffiliate['user_id'], $iAffiliateAmount);
+						}
 					} else {
 						Phpfox::log('Affiliate not found');
 					}
