@@ -182,17 +182,19 @@ class ElMoney extends Phpfox_Service
             _p('Sale history') => 'sold',
         ];
 
-        if (Phpfox::isModule('friend')) {
+        if (Phpfox::isModule('friend') && Phpfox::getUserParam('elmoney.can_send_to_friend')) {
             $aMenu[_p('Send to a friend')] = 'elmoney.sendtofriend';
         }
 
-        if ($this->oSetting['withdraw']) {
+        if ($this->oSetting['withdraw'] && Phpfox::getUserParam('elmoney.can_withdraw')) {
             $aMenu[_p('Withdraw')] = 'elmoney.withdraw';
             $aMenu[_p('Withdraw History')] = 'elmoney.withdraw.history';
         }
 
-        $aMenu[_p('Affiliate links')] = 'elmoney.affiliate.links';
-        $aMenu[_p('Affiliate statistics')] = 'elmoney.affiliate.statistics';
+        if (Phpfox::getUserParam('elmoney.can_affiliate')) {
+            $aMenu[_p('Affiliate links')] = 'elmoney.affiliate.links';
+            $aMenu[_p('Affiliate statistics')] = 'elmoney.affiliate.statistics';
+        }
 
         return $aMenu;
 

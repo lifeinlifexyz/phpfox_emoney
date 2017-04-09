@@ -5,5 +5,5 @@
     {/foreach}
 </select>
 <br/>
-<input onclick="$.ajaxCall('elmoney.changeCurrency', 'currency='+$('#currency option:selected').val()+'&update=true');" class="btn btn-primary" type="button" value="{_p var='credits.change'}" />
+<input onclick="$.ajaxCall('elmoney.changeCurrency', 'currency='+$('#currency option:selected').val()+'&update=true');" class="btn btn-primary" type="button" value="{_p('Change currency')}" />
 {/if}

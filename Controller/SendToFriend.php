@@ -11,6 +11,7 @@ class SendToFriend extends \Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
+        Phpfox::getUserParam('elmoney.can_send_to_friend', true);
 
         $oSettings =  Phpfox::getService('elmoney.settings');
 

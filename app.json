@@ -11,6 +11,53 @@
     "Manage user balance": "elmoney.funds.manage",
     "Withdraw": "elmoney.withdraw"
   },
+  "user_group_settings": {
+    "elmoney.can_affiliate": {
+      "info": "Can participate in affiliate?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "elmoney.can_withdraw": {
+      "info": "Can withdraw?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "elmoney.can_send_to_friend": {
+      "info": "Can send to a friend?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    }
+  },
   "admincp_route": "/admincp/elmoney/funds/manage",
   "component" : {
     "block" : {

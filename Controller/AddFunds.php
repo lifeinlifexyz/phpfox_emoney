@@ -17,7 +17,7 @@ class AddFunds extends \Phpfox_Component
 
         $this->template()
             ->setTitle(_p('Add funds to your account'))
-            ->setBreadCrumb(_p('Add funds to your account'))
+            ->setBreadCrumb(_p('Add funds to your account'), '', true)
             ->assign([
                 'aSettings' => Phpfox::getService('elmoney.settings')->all(),
                 'sUserExchangeRate' => Phpfox::getPhrase('elmoney.elmoney_user_exchange_rate_message',

@@ -11,6 +11,7 @@ class WithdrawHistory extends \Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
+        Phpfox::getUserParam('elmoney.can_withdraw', true);
         $oSettings =  Phpfox::getService('elmoney.settings');
         if (!$oSettings['withdraw']) {
             $this->url()->send('profile.elmoney');

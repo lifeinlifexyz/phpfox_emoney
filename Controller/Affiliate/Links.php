@@ -11,8 +11,7 @@ class Links extends \Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
-
-
+        Phpfox::getUserParam('elmoney.can_affiliate', true);
 
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
 
