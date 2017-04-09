@@ -5,7 +5,7 @@ namespace Apps\CM_ElMoney\Controller;
 use Phpfox;
 use Phpfox_Plugin;
 
-class Profile extends \Phpfox_Component
+class Index extends \Phpfox_Component
 {
 
     public function process()
@@ -17,7 +17,7 @@ class Profile extends \Phpfox_Component
 
         $aSectionMenu = Phpfox::getService('elmoney')->getSectionMenu();
 
-        \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', $aSectionMenu);
+        \Phpfox_Template::instance()->buildSectionMenu('elmoney', $aSectionMenu);
 
 
         switch($sView) {
@@ -46,7 +46,7 @@ class Profile extends \Phpfox_Component
                 'when_field' => 'time_stamp',
                 'table_alias' => 'tr',
                 'search' => [
-                    'action' => $this->url()->makeUrl('profile.elmoney', ['view' => 'purchase']),
+                    'action' => $this->url()->makeUrl('elmoney', ['view' => 'purchase']),
                     'default_value' => _p('Comment'),
                     'name' => 'search',
                     'field' => ['`tr`.`item_name`', '`tr`.`item_number`', '`tr`.`comment`']
@@ -78,6 +78,6 @@ class Profile extends \Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_profile_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_index_clean')) ? eval($sPlugin) : false);
     }
 }

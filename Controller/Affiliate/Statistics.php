@@ -16,7 +16,7 @@ class Statistics extends \Phpfox_Component
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
 
         $aSectionMenu = Phpfox::getService('elmoney')->getSectionMenu();
-        \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', $aSectionMenu);
+        \Phpfox_Template::instance()->buildSectionMenu('elmoney', $aSectionMenu);
 
         $this->search()->setCondition(' AND `af`.`owner_id` = ' . Phpfox::getUserId());
 
@@ -58,6 +58,6 @@ class Statistics extends \Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_profile_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_affiliate_stat_clean')) ? eval($sPlugin) : false);
     }
 }

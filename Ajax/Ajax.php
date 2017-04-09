@@ -53,7 +53,7 @@ class Ajax extends Phpfox_Ajax
             'item_number' => $aItemNumber,
             'currency_code' => $sUserCurrency,
             'amount' => $iPrice,
-            'return' => \Phpfox_Url::instance()->makeUrl('profile.elmoney', ['payment' => 'done']),
+            'return' => \Phpfox_Url::instance()->makeUrl('elmoney', ['payment' => 'done']),
             'item_name' => $sItemName,
             'recurring' => '',
             'recurring_cost' => '',

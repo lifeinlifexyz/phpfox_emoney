@@ -14,11 +14,11 @@ class WithdrawHistory extends \Phpfox_Component
         Phpfox::getUserParam('elmoney.can_withdraw', true);
         $oSettings =  Phpfox::getService('elmoney.settings');
         if (!$oSettings['withdraw']) {
-            $this->url()->send('profile.elmoney');
+            $this->url()->send('elmoney');
         }
 
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
-        \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', Phpfox::getService('elmoney')->getSectionMenu());
+        \Phpfox_Template::instance()->buildSectionMenu('elmoney', Phpfox::getService('elmoney')->getSectionMenu());
 
         $this->search()->setCondition(' AND `wh`.`user_id` = ' . Phpfox::getUserId());
 
@@ -71,6 +71,6 @@ class WithdrawHistory extends \Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_profile_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_withdraw_history_clean')) ? eval($sPlugin) : false);
     }
 }

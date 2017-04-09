@@ -16,7 +16,7 @@ class Links extends \Phpfox_Component
         sectionMenu(_p('Add funds'), url('/elmoney/funds/add'), ['css_class' => 'popup']);
 
         $aSectionMenu = Phpfox::getService('elmoney')->getSectionMenu();
-        \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', $aSectionMenu);
+        \Phpfox_Template::instance()->buildSectionMenu('elmoney', $aSectionMenu);
         Phpfox::massCallback('getAffiliateCode');
 
         $aSupportedModules = Phpfox::getService('elmoney.affiliate')->getAllowedModules();
@@ -42,6 +42,6 @@ class Links extends \Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_profile_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_affiliate_links_clean')) ? eval($sPlugin) : false);
     }
 }

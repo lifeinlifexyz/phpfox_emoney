@@ -12,12 +12,6 @@ use Phpfox_Plugin;
  */
 class Callback extends \Phpfox_Service
 {
-
-    public function getProfileLink()
-    {
-        return 'profile.elmoney';
-    }
-
     public function paymentApiCallback($aParams)
     {
         Phpfox::log('Module callback recieved: ' . var_export($aParams, true));

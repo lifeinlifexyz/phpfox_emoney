@@ -47,7 +47,7 @@ class Payments extends Phpfox_Service
             'amount' => Phpfox::getService('elmoney')->calculateTotal($iAmount),
             'currency_code' => $this->oParse->clean($sCurrencyId, 5),
             'item_name' => _p('Add funds'),
-            'return_url' => \Phpfox_Url::instance()->makeUrl('profile.elmoney'),
+            'return_url' => \Phpfox_Url::instance()->makeUrl('elmoney'),
         ]);
 
         $this->database()->update($this->sTable, ['item_number' => 'elmoney|' . $iID], 'payment_id = ' . $iID);

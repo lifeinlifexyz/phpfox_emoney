@@ -38,6 +38,6 @@ class AddFunds extends \Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_profile_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_index_clean')) ? eval($sPlugin) : false);
     }
 }

@@ -26,7 +26,7 @@ class Confirm extends \Phpfox_Component
 
         $aSectionMenu = Phpfox::getService('elmoney')->getSectionMenu();
 
-        \Phpfox_Template::instance()->buildSectionMenu('profile.elmoney', $aSectionMenu);
+        \Phpfox_Template::instance()->buildSectionMenu('elmoney', $aSectionMenu);
 
         $iAmount = $aVals['amount'];
         $iUserBalance = Phpfox::getService('elmoney')->getUserBalance();

@@ -11,6 +11,11 @@
     "Manage user balance": "elmoney.funds.manage",
     "Withdraw": "elmoney.withdraw"
   },
+  "menu": {
+    "name": "El Money",
+    "url": "/elmoney",
+    "icon": "money"
+  },
   "user_group_settings": {
     "elmoney.can_affiliate": {
       "info": "Can participate in affiliate?",
@@ -65,7 +70,7 @@
       "currency" : ""
     },
     "controller" : {
-      "profile" : "elmoney.profile"
+      "index" : "elmoney.index"
     }
   },
   "component_block" : {

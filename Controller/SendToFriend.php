@@ -15,7 +15,7 @@ class SendToFriend extends \Phpfox_Component
 
         $oSettings =  Phpfox::getService('elmoney.settings');
 
-        $this->template()->buildSectionMenu('profile.elmoney', Phpfox::getService('elmoney')->getSectionMenu());
+        $this->template()->buildSectionMenu('elmoney', Phpfox::getService('elmoney')->getSectionMenu());
 
         $aValidation = [
             'amount' => _p('Amount is required'),
@@ -62,7 +62,7 @@ class SendToFriend extends \Phpfox_Component
                             'seller_balance' => $iFriendBalance,
                         ]);
                     }
-                    $this->url()->send('profile.elmoney', ['view' => 'purchase'], _p('Successfully completed'));
+                    $this->url()->send('elmoney', ['view' => 'purchase'], _p('Successfully completed'));
                 }
             }
         }
@@ -83,6 +83,6 @@ class SendToFriend extends \Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_profile_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('api.component_controller_elmoney_send_to_friend_clean')) ? eval($sPlugin) : false);
     }
 }

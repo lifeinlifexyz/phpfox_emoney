@@ -15,7 +15,7 @@ class Withdraw extends \Phpfox_Component
         $oSettings =  Phpfox::getService('elmoney.settings');
 
         if (!$oSettings['withdraw']) {
-            $this->url()->send('profile.elmoney');
+            $this->url()->send('elmoney');
         }
 
         $aUserGateways = Phpfox::getService('api.gateway')->getUserGateways(Phpfox::getUserId());
@@ -81,7 +81,7 @@ class Withdraw extends \Phpfox_Component
 
 
 
-        $this->template()->buildSectionMenu('profile.elmoney', Phpfox::getService('elmoney')->getSectionMenu());
+        $this->template()->buildSectionMenu('elmoney', Phpfox::getService('elmoney')->getSectionMenu());
         $this->template()->setTitle(_p('Withdraw'))
             ->setBreadCrumb(_p('Withdraw'))
             ->assign([

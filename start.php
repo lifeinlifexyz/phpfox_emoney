@@ -49,7 +49,7 @@ group('/admincp/elmoney/', function(){
 defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getService('elmoney')->isActive());
 
 Phpfox_Module::instance()->addComponentNames('controller', [
-    'elmoney.profile' => 'Apps\CM_ElMoney\Controller\Profile',
+    'elmoney.index' => 'Apps\CM_ElMoney\Controller\Index',
     'elmoney.confirm' => 'Apps\CM_ElMoney\Controller\Confirm',
     'elmoney.funds.add' => 'Apps\CM_ElMoney\Controller\AddFunds',
     'elmoney.sendtofriend' => 'Apps\CM_ElMoney\Controller\SendToFriend',
@@ -70,8 +70,8 @@ group('/elmoney/', function(){
     route('admincp/funds/add', 'elmoney.admincp.funds.add');
 
     if (CM_EL_MONEY_IS_ACTIVE) {
-        route('profile', 'elmoney.profile');
-        route('profile.purchase', 'elmoney.profile');
+        route('', 'elmoney.index');
+        route('purchase', 'elmoney.index');
         route('sendtofriend', 'elmoney.sendtofriend');
         route('funds/add', 'elmoney.funds.add');
         route('confirm', 'elmoney.confirm');
