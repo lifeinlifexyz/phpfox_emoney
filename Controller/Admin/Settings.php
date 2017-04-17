@@ -110,6 +110,9 @@ class Settings extends \Phpfox_Component
             }
         }
 
+        $aAdminAffiliates = ['subscribe'];
+
+        (($sPlugin = Phpfox_Plugin::get('elmoney.before_setting_controller_template')) ? eval($sPlugin) : false);
         $this->template()
             ->setPhrase([
                 _p('Remove'),
@@ -118,6 +121,7 @@ class Settings extends \Phpfox_Component
             ->assign([
                     'aCurrencies' => $aCurrencies,
                     'aForms' => $aForms,
+                    'aAdminAffiliates' => $aAdminAffiliates,
                 ]
             );
         return null;

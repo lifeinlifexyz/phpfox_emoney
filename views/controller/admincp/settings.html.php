@@ -137,6 +137,7 @@ defined('PHPFOX') or exit('NO DICE!');
     </div>
 
     {foreach from=$aForms.affiliate key=sType item=aItem}
+        {if in_array($sType, $aAdminAffiliates)}
         <div class="table form-group">
             <input type="hidden" name="val[affiliate][{$sType}][title]" value="{$aItem.title}">
             <div class="table_left">
@@ -149,6 +150,9 @@ defined('PHPFOX') or exit('NO DICE!');
             {/foreach}
             <div class="clear"></div>
         </div>
+       {else}
+            <input type="hidden" value="{$iPercent}" class="form-control" name="val[affiliate][{$sType}][percent][{$iItemId}]" />
+        {/if}
     {/foreach}
 
     <div class="table_clear">
