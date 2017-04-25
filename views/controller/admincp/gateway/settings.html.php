@@ -36,7 +36,7 @@ defined('PHPFOX') or exit('NO DICE!');
     </div>
     {if is_array($aForms.custom)}
     {foreach from=$aForms.custom key=sFormField item=aCustom}
-    <div class="table form-group">
+    <div class="table form-group hidden">
         <div class="table_left">
             {$aCustom.phrase}:
         </div>
