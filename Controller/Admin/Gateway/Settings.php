@@ -21,6 +21,7 @@ class Settings extends \Phpfox_Component
             if (Phpfox::getService('api.gateway.process')->update($aGateway['gateway_id'], $aVals))
             {
                 \Phpfox::getService('admincp.module.process')->updateActivity('elmoney', $aVals['is_active']);
+                db()->update(Phpfox::getT('menu'), ['is_active' => (int) $aVals['is_active']], '`url_value` = \'/elmoney\'');
                 cache()->del('elmoney_gateway_setting');
                 $this->url()->send('admincp.app',
                     [

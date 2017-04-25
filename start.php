@@ -50,6 +50,7 @@ defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getS
 
 if (!CM_EL_MONEY_IS_ACTIVE) {
     \Phpfox::getService('admincp.module.process')->updateActivity('elmoney', 0);
+    db()->update(Phpfox::getT('menu'), ['is_active' => 0], '`url_value` = \'/elmoney\'');
 }
 
 Phpfox_Module::instance()->addComponentNames('controller', [
