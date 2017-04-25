@@ -48,6 +48,10 @@ group('/admincp/elmoney/', function(){
 
 defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getService('elmoney')->isActive());
 
+if (!CM_EL_MONEY_IS_ACTIVE) {
+    \Phpfox::getService('admincp.module.process')->updateActivity('elmoney', 0);
+}
+
 Phpfox_Module::instance()->addComponentNames('controller', [
     'elmoney.index' => 'Apps\CM_ElMoney\Controller\Index',
     'elmoney.confirm' => 'Apps\CM_ElMoney\Controller\Confirm',

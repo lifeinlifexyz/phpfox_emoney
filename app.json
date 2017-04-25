@@ -63,7 +63,7 @@
       }
     }
   },
-  "admincp_route": "/admincp/elmoney/funds/manage",
+  "admincp_route": "/admincp/elmoney/gateway/settings",
   "component" : {
     "block" : {
       "balance" : "",
