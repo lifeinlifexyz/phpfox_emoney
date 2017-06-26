@@ -49,7 +49,7 @@ group('/admincp/elmoney/', function(){
 defined('CM_EL_MONEY_IS_ACTIVE') or define('CM_EL_MONEY_IS_ACTIVE', Phpfox::getService('elmoney')->isActive());
 
 if (!CM_EL_MONEY_IS_ACTIVE) {
-    \Phpfox::getService('admincp.module.process')->updateActivity('elmoney', 0);
+    //\Phpfox::getService('admincp.module.process')->updateActivity('elmoney', 0); //for fix if gateway disabled
     db()->update(Phpfox::getT('menu'), ['is_active' => 0], '`url_value` = \'/elmoney\'');
 }
 
