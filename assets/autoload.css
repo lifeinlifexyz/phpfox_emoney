@@ -31,6 +31,8 @@
     width: 20%;
     background: #ffffff;
     float: right;
+    padding: 15px;
+    margin-left: 10px;
 }
 .el_money_user_block_search .text-center {
     text-align: center !important;

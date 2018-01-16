@@ -6,34 +6,37 @@ defined('PHPFOX') or exit('NO DICE!');
 
     <div class="block_content">
         {if $aUsers}
-        <table cellpadding="0" cellspacing="0">
-        <tr>
-            <th>{phrase var='user.user_id'}</th>
-            <th>{phrase var='user.photo'}</th>
-            <th>{phrase var='user.display_name'}</th>
-            <th>{phrase var='user.email_address'}</th>
-            <th>{_p('Balance')}</th>
-        </tr>
-        {foreach from=$aUsers name=users key=iKey item=aUser}
-        <tr id="user-{$aUser.user_id}" class="checkRow{if is_int($iKey/2)} tr{else}{/if} row{$iKey}" data-user-id="{$aUser.user_id}">
-            <td>#{$aUser.user_id}</td>
-            <td>{img user=$aUser suffix='_50_square' max_width=50 max_height=50}</td>
-            <td>{$aUser|user}</td>
-            <td><a href="mailto:{$aUser.email}">{if (isset($aUser.pendingMail) && $aUser.pendingMail != '')} {$aUser.pendingMail} {else} {$aUser.email} {/if}</a>{if isset($aUser.unverified) && $aUser.unverified > 0} <span class="js_verify_email_{$aUser.user_id}" onclick="$.ajaxCall('user.verifyEmail', 'iUser={$aUser.user_id}');">{phrase var='user.verify'}</span>{/if}</td>
-            <td class="elmoney-balance">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="elmoney-balance-value form-control" value="{$aUser.user_el_balance}">
-                    </div>
-                    <button class="btn btn-default" title="{_p('Save')}">
-                        &nbsp;<i class="fa fa-save"></i>&nbsp;
-                    </button>
-                </form>
-            </td>
-        </tr>
-        {/foreach}
-        </table>
-        {pager}
+            <div class="panel panel-default">
+                <table cellpadding="0" cellspacing="0" class="table admin-table">
+                    <tr>
+                        <th>{phrase var='user.user_id'}</th>
+                        <th>{phrase var='user.photo'}</th>
+                        <th>{phrase var='user.display_name'}</th>
+                        <th>{phrase var='user.email_address'}</th>
+                        <th>{_p('Balance')}</th>
+                    </tr>
+                    {foreach from=$aUsers name=users key=iKey item=aUser}
+                    <tr id="user-{$aUser.user_id}" class="checkRow{if is_int($iKey/2)} tr{else}{/if} row{$iKey}" data-user-id="{$aUser.user_id}">
+                        <td>#{$aUser.user_id}</td>
+                        <td>{img user=$aUser suffix='_50_square' max_width=50 max_height=50}</td>
+                        <td>{$aUser|user}</td>
+                        <td><a href="mailto:{$aUser.email}">{if (isset($aUser.pendingMail) && $aUser.pendingMail != '')} {$aUser.pendingMail} {else} {$aUser.email} {/if}</a>{if isset($aUser.unverified) && $aUser.unverified > 0} <span class="js_verify_email_{$aUser.user_id}" onclick="$.ajaxCall('user.verifyEmail', 'iUser={$aUser.user_id}');">{phrase var='user.verify'}</span>{/if}</td>
+                        <td class="elmoney-balance">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" class="elmoney-balance-value form-control" value="{$aUser.user_el_balance}">
+                                </div>
+                                <button class="btn btn-default" title="{_p('Save')}">
+                                    &nbsp;<i class="fa fa-save"></i>&nbsp;
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {/foreach}
+                </table>
+            </div>
+
+            {pager}
         {/if}
     </div>
     <div class="clearfix"></div>
