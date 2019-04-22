@@ -1,3 +1,7 @@
+<h2>Paid Support:</h2>       
+<p>The phpfox apps and themes by codemake are provided under the MIT license with no commercial support or liability. 
+<a href="mailto:phpfox@lifeinlife.xyz">phpfox@lifeinlife.xyz</a> also provides commercial support and professional customisation services.</p>
+
 <h2>PHPFox Emoney:</h2>
 
 Do you want to increase your income easily and enjoy from it? Than the partner program and electronic money app is just for your website! This app provides possibilities to create internal currency and you will be able to give opportunities to your users to create partnership links and increase selling in market places and other modules. Herewith the owner of the site can earn commissions transactions and enlarge financial profits.
